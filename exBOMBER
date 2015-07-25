@@ -1,0 +1,80 @@
+#!/bin/bash
+# exBOMBER
+# -------------------------------------------------------
+# exBOMBER: A PHP site hack/exploit finder
+# version: .01
+# Github: https://github.com/InterGenStudios
+# ---------------------------------------------------
+# InterGenStudios: 7-25-15
+# Copyright (c) 2015: Christopher 'InterGen' Cork  InterGenStudios
+# --------------------------------
+# License: GPL-2.0+
+# URL: http://opensource.org/licenses/gpl-license.php
+# ---------------------------------------------------
+# exBOMBER is free software:
+# You may redistribute it and/or modify it under the terms of the
+# GNU General Public License as published by the Free Software
+# Foundation, either version 2 of the License, or (at your discretion)
+# any later version.
+# ------------------
+
+
+# To Do List
+#
+
+
+###########################################
+##---------------------------------------##
+## BEGIN - INITIAL VARIABLE DECLARATIONS ##
+##---------------------------------------##
+###########################################
+
+# Set timestamp
+TIMESTAMP="$(date +"%m-%d-%Y_%T")"
+
+RED="\e[1m\e[31m"
+GREEN="\e[1m\e[32m"
+YELLOW="\e[1m\e[33m"
+BLUE="\e[1m\e[34m"
+PURPLE="\e[1m\e[35m"
+CYAN="\e[1m\e[36m"
+WHITE="\e[1m\e[37m"
+NOCOLOR="\e[0m"
+BLINK="\e[5m"
+UNDERLINE_TEXT="\e[4m"
+
+#########################################
+##-------------------------------------##
+## END - INITIAL VARIABLE DECLARATIONS ##
+##-------------------------------------##
+#########################################
+
+##############################
+##--------------------------##
+## BEGIN - SCRIPT FUNCTIONS ##
+##--------------------------##
+##############################
+
+#----------------------------------#
+# BEGIN - DISPLAY LAYOUT FUNCTIONS #
+#----------------------------------#
+
+# Simple divider
+DIVIDER () {
+
+    echo -e "\n${GREEN}---------------------------------------------------------${NOCOLOR}\n"
+
+}
+
+# Creates uniform look during script execution when called after any clear command
+HEADER () {
+
+    echo -e "\n${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
+    echo -e "${WHITE}    ex${BLUE}BOMBER ${GREEN}version${NOCOLOR}.01    ran on $TIMESTAMP"
+    echo -e "${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
+
+}
+
+#--------------------------------#
+# END - DISPLAY LAYOUT FUNCTIONS #
+#--------------------------------#
