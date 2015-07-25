@@ -62,7 +62,7 @@ UNDERLINE_TEXT="\e[4m"
 # Simple divider
 DIVIDER () {
 
-    echo -e "\n${GREEN}---------------------------------------------------------${NOCOLOR}\n"
+    echo -e "\n${CYAN}---------------------------------------------------------${NOCOLOR}\n"
 
 }
 
@@ -70,7 +70,7 @@ DIVIDER () {
 HEADER () {
 
     echo -e "\n${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
-    echo -e "${WHITE}    ex${BLUE}BOMBER ${GREEN}version${NOCOLOR}.01    ran on $TIMESTAMP"
+    echo -e "${WHITE}    ex${BLUE}BOMBER ${CYAN}version${NOCOLOR}.01    ${PURPLE}ran on $TIMESTAMP"
     echo -e "${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
 
 }
