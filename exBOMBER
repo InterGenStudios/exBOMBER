@@ -90,14 +90,31 @@ GET_INSTRUCTIONS () {
     echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Selection${NOCOLOR}]: "
     read get_instructions
     case $get_instructions in
-        1) CHECK_FOR_FINDBOT
-           EXEC_FINDBOT
+        1) mkdir -p /var/log/exb_logs/findbot
+           CHECK_FOR_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/chk_fbt_$TIMESTAMP
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/findbot/chk_fbt_$TIMESTAMP
+           EXEC_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/exec_fbt_$TIMESTAMP
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/findbot/exec_fbt_$TIMESTAMP
             ;;
-        2) CHECK_FOR_MALDET
-           EXEC_MALDET
+        2) mkdir -p /var/log/exb_logs/maldet
+           CHECK_FOR_MALDET 2>&1 | tee /var/log/exb_logs/maldet/chk_mldt_$TIMESTAMP
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/maldet/chk_mldt_$TIMESTAMP
+           EXEC_MALDET 2>&1 | tee /var/log/exb_logs/maldet/exec_mldt_$TIMESTAMP
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/maldet/exec_mldt_$TIMESTAMP
             ;;
-        3) PHP_SITE_SCAN
-           EXEC_PHP_SITE_SCAN
+        3) mkdir -p /var/log/exb_logs/php_scan
+           EXEC_PHP_SITE_SCAN 2>&1 | tee /var/log/exb_logs/php_scan/site_scan_$TIMESTAMP
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/php_scan/site_scan_$TIMESTAMP
             ;;
         1-i) FINDBOT_HELPTEXT
             ;;
@@ -106,7 +123,7 @@ GET_INSTRUCTIONS () {
         3-i) PHP_SITE_SCAN_HELPTEXT
             ;;
         *) printf "\n"
-           echo -e "    ${RED}${BLINK}INVALID SELECTION${NOCOLOR}\n    Please choose again\n"
+           echo -e "    ${RED}${BLINK}INVALID SELECTION${NOCOLOR}\n\n    Please choose again"
            sleep 2
            GET_INSTRUCTIONS
             ;;
@@ -135,7 +152,10 @@ FINDBOT_HELPTEXT () {
     echo -e "        There are two types of ${WHITE}\"detections\"${NOCOLOR}:\n"
     echo -e "            ${WHITE}\"suspicious files\"${NOCOLOR} are files that contain things that -may- be"
     echo -e "            malicious.\n"
-    echo -e "            ${WHITE}\"malware\"${NOCOLOR} is definitely malicious software.\n\n\n\n\n"
+    echo -e "            ${WHITE}\"malware\"${NOCOLOR} is definitely malicious software.\n"
+    echo -e "        FINDBOT.PL scan logs will be written to:\n"
+    echo -e "            ${WHITE}/var/log/exb_logs/findbot/${NOCOLOR}<log>\n"
+    echo -e "        A pastebin of the log will also be provided.\n\n\n"
     echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
     read FHT_CHOICE
     case "$FHT_CHOICE" in
@@ -164,7 +184,7 @@ MALDET_HELPTEXT () {
     HEADER
     echo -e "    ${WHITE}MALDET HELPTEXT${NOCOLOR}"
     DIVIDER
-    echo -e "    ${BLUE}Detailed Information here${NOCOLOR} ${GREEN}===> ${WHITE}https://www.rfxn.com/appdocs/README.maldetect${NOCOLOR}\n"
+    echo -e "    ${GREEN}Detailed Information here${NOCOLOR} ${YELLOW}===> ${WHITE}https://www.rfxn.com/appdocs/README.maldetect${NOCOLOR}\n"
     echo -e "    Linux Malware Detect (LMD) is a malware scanner for Linux released under the"
     echo -e "    GNU GPLv2 license, that is designed around the threats faced in shared hosted"
     echo -e "    environments. It uses threat data from network edge intrusion detection systems"
@@ -179,8 +199,9 @@ MALDET_HELPTEXT () {
     echo -e "             ${WHITE}/home/*${NOCOLOR}"
     echo -e "        ${WHITE}CP${NOCOLOR} - Scans the user provided ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath\n"
     echo -e "    ${WHITE}${UNDERLINE_TEXT}Results${NOCOLOR}:\n"
-    echo -e "        In addition to Maldet's default logs, ${WHITE}ex${CYAN}BOMBER${NOCOLOR} Maldet scans will be written to:\n"
-    echo -e "            ${WHITE}/var/www/exb_logs/maldet/${NOCOLOR}<log>\n"
+    echo -e "        In addition to Maldet's default logs, ${WHITE}ex${CYAN}BOMBER${NOCOLOR} Maldet scan logs will be"
+    echo -e "        written to:\n"
+    echo -e "            ${WHITE}/var/log/exb_logs/maldet/${NOCOLOR}<log>\n"
     echo -e "        A pastebin of the log will also be provided.\n\n\n"
     echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
     read MHT_CHOICE
@@ -204,7 +225,105 @@ MALDET_HELPTEXT () {
 
 }
 
+PHP_SITE_SCAN_HELPTEXT () {
 
+    clear
+    HEADER
+    echo -e "    ${WHITE}PHP SITE SCAN HELPTEXT${NOCOLOR}"
+    DIVIDER
+    echo -e "    UNFINISHED\n\n\n"
+    echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
+    read PHT_CHOICE
+    case "$PHT_CHOICE" in
+
+        M) GET_INSTRUCTIONS
+            ;;
+        m) GET_INSTRUCTIONS
+            ;;
+        Q) printf "\n\n\n"
+           exit 0
+            ;;
+        q) printf "\n\n\n"
+           exit 0
+            ;;
+        *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
+           sleep 2
+           PHP_SITE_SCAN_HELPTEXT
+            ;;
+    esac
+
+}
+
+CHECK_FOR_FINDBOT () {
+
+    if [ -f "/root/support/exBOMBER/findbot.pl" ]; then
+        clear
+        HEADER
+        echo -e "    ${GREEN}FINDBOT.PL ${WHITE}is ${NOCOLOR}present on server\n\n"
+        sleep .5
+    else
+        clear
+        HEADER
+        echo -e "    ${GREEN}FINDBOT.PL ${NOCOLOR}is ${WHITE}not${NOCOLOR} present on server\n\n"
+        sleep .5
+        echo -e "    Fetching FINDBOT.PL...\n"
+        mkdir -p /root/support/exBOMBER
+        wget -q http://cbl.abuseat.org/findbot.pl -P /root/support/exBOMBER && chmod +x /root/support/exBOMBER/findbot.pl
+        sleep .5
+        echo -e "    Script retrieved successfully\n"
+        sleep .5
+    fi
+
+}
+
+CHECK_FOR_MALDET () {
+
+    if [ -f "/usr/local/maldetect/maldet" ]; then
+        clear
+        HEADER
+        echo -e "    ${GREEN}MALDET ${WHITE}is ${NOCOLOR}present on server\n\n"
+        sleep .5
+        echo -e "    Updating malware signatures, stand by...\n"
+        maldet -u 2>&1 >/dev/null && maldet -d 2>&1 >/dev/null
+        echo -e "    MALDET has been updated"
+        sleep .5
+    else
+        clear
+        HEADER
+        echo -e "    ${GREEN}MALDET ${NOCOLOR}is ${WHITE}not${NOCOLOR} present on server\n\n"
+        sleep .5
+        echo -e "    Fetching MALDET...\n"
+        mkdir -p /root/support/exBOMBER
+        wget -q http://www.rfxn.com/downloads/maldetect-current.tar.gz -P /root/support/exBOMBER/
+        cd /root/support/exBOMBER && tar xf /root/support/exBOMBER/maldetect-current.tar.gz
+        echo -e "    Installing MALDET, stand by...\n"
+        cd /root/support/exBOMBER/maldetect-* && /bin/bash install.sh 2>&1 >/dev/null &&
+        rm -rf /root/support/exBOMBER/maldetect-current.tar.gz
+        echo -e "    MALDET installed successfully\n"
+        sleep .5
+    fi
+
+}
+
+EXEC_FINDBOT () {
+
+    clear
+    HEADER
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL MENU${NOCOLOR}"
+    DIVIDER
+    echo -e "    "
+
+}
+
+EXEC_MALDET () {
+
+    clear
+    HEADER
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET MENU${NOCOLOR}"
+    DIVIDER
+
+
+}
 
 ############################
 ##------------------------##
@@ -222,7 +341,7 @@ if [ "$(id -u)" != "0" ]; then
     echo -e "\n\n${RED}${BLINK}--------${NOCOLOR}"
     echo -e "${RED}${BLINK}WARNING!${NOCOLOR}"
     echo -e "${RED}${BLINK}--------${NOCOLOR}\n\n"
-    echo -e "${CYAN}exBOMBER ${WHITE}must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
+    echo -e "${WHITE}ex${CYAN}BOMBER ${WHITE}must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
     echo -e "(Exiting now...)\n\n"
     exit 1
 fi
@@ -239,8 +358,11 @@ fi
 ##---------------------##
 #########################
 
-GET_INSTRUCTIONS
-
+mkdir -p /var/log/exb_logs/exBOMBER
+GET_INSTRUCTIONS 2>&1 | tee /var/log/exb_logs/exBOMBER/exBOMBER_$TIMESTAMP
+sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+-e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+-e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/exBOMBER/exBOMBER_$TIMESTAMP
 
 #######################
 ##-------------------##
