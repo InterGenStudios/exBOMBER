@@ -119,7 +119,7 @@ FINDBOT_HELPTEXT () {
     HEADER
     echo -e "    ${WHITE}FINDBOT.PL HELPTEXT${NOCOLOR}"
     DIVIDER
-    echo -e "    This script attempts to find malicious files/scripts on your machine.  It"
+    echo -e "    This script attempts to find malicious files/scripts on your machine. It"
     echo -e "    specifically looks for known documented spambots, as well as ${WHITE}\"suspicious\"${NOCOLOR}"
     echo -e "    constructs in various scripting languages.\n"
     echo -e "    By default, findbot.pl scans the directories ${WHITE}/tmp, /usr/tmp, /home,${NOCOLOR} and"
