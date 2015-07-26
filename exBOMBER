@@ -496,10 +496,10 @@ GET_NOTIFY_DESTINATION () {
     fi
     DIVIDER
     echo -e "    ${WHITE}${UNDERLINE_TEXT}Set Completed Scan Email Notification Address${NOCOLOR}\n\n"
-    echo -e -n "    Enter notification email address: "
+    echo -e -n "    Enter notification email address: ${GREEN}"
     read EMAIL_ADDR
     tput cuu 1 && tput el
-    echo -e -n "    Send notifications to ${GREEN}$EMAIL_ADDR${NOCOLOR}, is that correct (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}? ${NOCOLOR}"
+    echo -e -n "    ${NOCOLOR}Send notifications to ${GREEN}$EMAIL_ADDR${NOCOLOR}, is that correct (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}? ${NOCOLOR}"
     read EMAIL_ADDR_VERIFY
     case $EMAIL_ADDR_VERIFY in
         [y,Y]) tput cuu 1 && tput el
@@ -511,6 +511,69 @@ GET_NOTIFY_DESTINATION () {
                GET_NOTIFY_DESTINATION
                ;;
     esac
+    # NEED TO ASK FOR SUPPORT TICKET INFO
+}
+
+DETACH () {
+
+    if test -t 1; then
+        exec 1>/dev/null
+    fi
+    if test -t 2; then
+        exec 2>/dev/null
+    fi
+    "$@" &
+
+}
+
+SEARCH () {
+
+    clear
+    HEADER
+    if [ "$SCAN_TYPE" = "FB" ]; then
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
+        DIVIDER
+        echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
+        sleep 2
+        if [ "$TURBO_OPTION" = "ON" ]; then
+            tput cuu 1 && tput el
+            echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
+            echo $TIMESTAMP > /root/support/exBOMBER/timestamp
+
+            F_TURBO_SEARCH () {
+
+                /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS &&
+                stamp=$(cat /root/support/exBOMBER/timestamp)
+                curl -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
+                text@/var/log/exb_logs/findbot/turbo_scan_$stamp > /root/support/exBOMBER/findbot_pastefile
+                SUBJECT=FINDBOT_SCAN_$stamp
+                echo TO: $EMAIL_ADDR >> /root/support/exBOMBER/f_scan_email
+                echo " " >> /root/support/exBOMBER/f_scan_email
+                echo FROM: exBOMBER > /root/support/exBOMBER/f_scan_email
+                echo " " >> /root/support/exBOMBER/f_scan_email
+                echo SUBJECT: $SUBJECT >> /root/support/exBOMBER/f_scan_email
+                echo " " >> /root/support/exBOMBER/f_scan_email
+                echo Results are at: $(cat /root/support/exBOMBER/findbot_pastefile) >> /root/support/exBOMBER/f_scan_email
+                mail -s "$SUBJECT" $EMAIL_ADDR < /root/support/exBOMBER/f_scan_email
+                rm /root/support/exBOMBER/f_scan_email /root/support/exBOMBER/timestamp /root/support/exBOMBER/findbot_pastefile
+
+            }
+
+            DETACH F_TURBO_SEARCH 1> /var/log/exb_logs/findbot/turbo_scan_$(cat /root/support/exBOMBER/timestamp)
+            echo -e "    Notification will be sent to ${GREEEN}$EMAIL_ADDR upon completion\n"
+            echo -e "    Scan can be observed with:\n"
+            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$(cat /root/support/exBOMBER/timestamp)\n\n\n"
+        else
+
+
+
+    elif [ "$SCAN_TYPE" = "MD" ]; then
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
+        DIVIDER
+    else
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
+        DIVIDER
+    fi
 
 }
 
