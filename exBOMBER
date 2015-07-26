@@ -30,7 +30,7 @@
 ###########################################
 
 # Set timestamp
-TIMESTAMP="$(date +"%m-%d-%Y_%T")"
+TIMESTAMP="$(date +"%m-%d-%Y:%T")"
 
 RED="\e[1m\e[31m"
 GREEN="\e[1m\e[32m"
@@ -69,12 +69,128 @@ DIVIDER () {
 # Creates uniform look during script execution when called after any clear command
 HEADER () {
 
-    echo -e "\n${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
-    echo -e "${WHITE}    ex${BLUE}BOMBER ${CYAN}version${NOCOLOR}.01    ${PURPLE}ran on $TIMESTAMP"
-    echo -e "${BLUE}______________________________________________________________________________________${NOCOLOR}\n"
+    echo -e "\n${BLUE}====================================================================================${NOCOLOR}"
+    echo -e "${BLUE}===[ ${WHITE}ex${CYAN}BOMBER ${WHITE}version${GREEN}.01 ${BLUE}]================================[ ${WHITE}$TIMESTAMP ${BLUE}]===${NOCOLOR}"
+    echo -e "${BLUE}====================================================================================${NOCOLOR}\n\n"
 
 }
 
 #--------------------------------#
 # END - DISPLAY LAYOUT FUNCTIONS #
 #--------------------------------#
+
+GET_INSTRUCTIONS () {
+
+    clear
+    HEADER
+    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select an operation${NOCOLOR}:\n\n"
+    echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)"
+    echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)"
+    echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n"
+    echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Selection${NOCOLOR}]: "
+    read get_instructions
+    case $get_instructions in
+        1) CHECK_FOR_FINDBOT
+           EXEC_FINDBOT
+            ;;
+        2) CHECK_FOR_MALDET
+           EXEC_MALDET
+            ;;
+        3) PHP_SITE_SCAN
+           EXEC_PHP_SITE_SCAN
+            ;;
+        1-i) FINDBOT_HELPTEXT
+            ;;
+        2-i) MALDET_HELPTEXT
+            ;;
+        3-i) PHP_SITE_SCAN_HELPTEXT
+            ;;
+        *) printf "\n"
+           echo -e "    ${RED}${BLINK}INVALID SELECTION${NOCOLOR}\n    Please choose again\n"
+           sleep 2
+           GET_INSTRUCTIONS
+            ;;
+    esac
+}
+
+FINDBOT_HELPTEXT () {
+
+    clear
+    HEADER
+    echo -e "    ${WHITE}FINDBOT.PL HELPTEXT${NOCOLOR}"
+    DIVIDER
+    echo "    This script attempts to find malicious files/scripts on your machine.  It"
+    echo "    specifically looks for known documented spambots, as well as \"suspicious\""
+    echo -e "    constructs in various scripting languages.\n"
+    echo "    By default, findbot.pl scans the directories /tmp, /usr/tmp, /home, and"
+    echo "    /var/www.  This script isn't fast, so if you know where to look you can"
+    echo "    speed things up by passing it only the directories that you suspect"
+    echo -e "    contain malware.\n"
+    echo -e "    You can often find out which user is infected by using:\n"
+    echo -e "         ${WHITE}lsof -i | grep smtp${NOCOLOR}\n"
+    echo -e "    and looking for processes that do NOT belong to your mailserver.\n"
+    echo "    If you successfully find the user, you should then look everywhere the"
+    echo "    user has write permissions - you can then run findbot.pl faster with"
+    echo -e "    something similar to:\n"
+    echo -e "         ${WHITE}findbot.pl /tmp /usr/tmp /home/<user> <user's web docroot>${NOCOLOR}\n"
+    echo "    There are two types of \"detections\" - \"suspicious files\" are files"
+    echo "    that contain things that -may- be malicious.  \"Malware\" is definitely"
+    echo -e "    malicious software.\n"
+    echo "    This script needs the following command line utilities.  It will not run"
+    echo -e "    if it cannot find them.  You will need to install them yourself:\n"
+    echo -e "         - ${WHITE}\"md5sum\" (Linux) or \"md5\" (FreeBSD etc) this appears to be"
+    echo -e "         -     standard core utilities."
+    echo -e "         - \"strings\" - on Linux this is in the \"binutils\" package"
+    echo -e "         - \"file\" - on Linux this is in the \"file\" package${NOCOLOR}\n"
+    echo -e "    ${GREEN}${UNDERLINE_TEXT}Usage${NOCOLOR}"
+    echo -e "         ${WHITE}findbot.pl [-c] [directories...]${NOCOLOR}\n"
+    echo -e "    If a list of directories is supplied, it is used, otherwise ${WHITE}/tmp /usr/tmp"
+    echo -e "    /home ${NOCOLOR}and ${WHITE}/var/www ${NOCOLOR}are used by default.\n"
+    echo -e "    The ${WHITE}-c${NOCOLOR} option is a shortcut to make finding cryptophp faster and easier,"
+    echo -e "    but this may not work in all situations.\n"
+
+}
+
+############################
+##------------------------##
+## END - SCRIPT FUNCTIONS ##
+##------------------------##
+############################
+
+#############################################
+##-----------------------------------------##
+## BEGIN - MAKE SURE WE'RE RUNNING AS ROOT ##
+##-----------------------------------------##
+#############################################
+
+if [ "$(id -u)" != "0" ]; then
+    echo -e "\n\n${RED}${BLINK}--------${NOCOLOR}"
+    echo -e "${RED}${BLINK}WARNING!${NOCOLOR}"
+    echo -e "${RED}${BLINK}--------${NOCOLOR}\n\n"
+    echo -e "${CYAN}exBOMBER ${WHITE}must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
+    echo -e "(Exiting now...)\n\n"
+    exit 1
+fi
+
+###########################################
+##---------------------------------------##
+## END - MAKE SURE WE'RE RUNNING AS ROOT ##
+##---------------------------------------##
+###########################################
+
+#########################
+##---------------------##
+## BEGIN - CORE SCRIPT ##
+##---------------------##
+#########################
+
+GET_INSTRUCTIONS
+
+
+#######################
+##-------------------##
+## END - CORE SCRIPT ##
+##-------------------##
+#######################
+
+exit 0
