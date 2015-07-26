@@ -119,37 +119,92 @@ FINDBOT_HELPTEXT () {
     HEADER
     echo -e "    ${WHITE}FINDBOT.PL HELPTEXT${NOCOLOR}"
     DIVIDER
-    echo "    This script attempts to find malicious files/scripts on your machine.  It"
-    echo "    specifically looks for known documented spambots, as well as \"suspicious\""
+    echo -e "    This script attempts to find malicious files/scripts on your machine.  It"
+    echo -e "    specifically looks for known documented spambots, as well as ${WHITE}\"suspicious\"${NOCOLOR}"
     echo -e "    constructs in various scripting languages.\n"
-    echo "    By default, findbot.pl scans the directories /tmp, /usr/tmp, /home, and"
-    echo "    /var/www.  This script isn't fast, so if you know where to look you can"
-    echo "    speed things up by passing it only the directories that you suspect"
+    echo -e "    By default, findbot.pl scans the directories ${WHITE}/tmp, /usr/tmp, /home,${NOCOLOR} and"
+    echo -e "    ${WHITE}/var/www${NOCOLOR}.  This script isn't fast, so if you know where to look you can"
+    echo -e "    speed things up by passing it only the directories that you suspect"
     echo -e "    contain malware.\n"
-    echo -e "    You can often find out which user is infected by using:\n"
-    echo -e "         ${WHITE}lsof -i | grep smtp${NOCOLOR}\n"
-    echo -e "    and looking for processes that do NOT belong to your mailserver.\n"
-    echo "    If you successfully find the user, you should then look everywhere the"
-    echo "    user has write permissions - you can then run findbot.pl faster with"
-    echo -e "    something similar to:\n"
-    echo -e "         ${WHITE}findbot.pl /tmp /usr/tmp /home/<user> <user's web docroot>${NOCOLOR}\n"
-    echo "    There are two types of \"detections\" - \"suspicious files\" are files"
-    echo "    that contain things that -may- be malicious.  \"Malware\" is definitely"
-    echo -e "    malicious software.\n"
-    echo "    This script needs the following command line utilities.  It will not run"
-    echo -e "    if it cannot find them.  You will need to install them yourself:\n"
-    echo -e "         - ${WHITE}\"md5sum\" (Linux) or \"md5\" (FreeBSD etc) this appears to be"
-    echo -e "         -     standard core utilities."
-    echo -e "         - \"strings\" - on Linux this is in the \"binutils\" package"
-    echo -e "         - \"file\" - on Linux this is in the \"file\" package${NOCOLOR}\n"
-    echo -e "    ${GREEN}${UNDERLINE_TEXT}Usage${NOCOLOR}"
-    echo -e "         ${WHITE}findbot.pl [-c] [directories...]${NOCOLOR}\n"
-    echo -e "    If a list of directories is supplied, it is used, otherwise ${WHITE}/tmp /usr/tmp"
-    echo -e "    /home ${NOCOLOR}and ${WHITE}/var/www ${NOCOLOR}are used by default.\n"
-    echo -e "    The ${WHITE}-c${NOCOLOR} option is a shortcut to make finding cryptophp faster and easier,"
-    echo -e "    but this may not work in all situations.\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Options${NOCOLOR}:\n"
+    echo -e "        ${WHITE}ES${NOCOLOR} - Scans the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver"
+    echo -e "        ${WHITE}DD${NOCOLOR} - Scans the ${WHITE}D${NOCOLOR}efault ${WHITE}D${NOCOLOR}irectories:"
+    echo -e "             ${WHITE}/tmp, /usr/tmp, /home, ${NOCOLOR}and ${WHITE}/var/www${NOCOLOR}"
+    echo -e "        ${WHITE}CP${NOCOLOR} - Scans the user provided ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Results${NOCOLOR}:\n"
+    echo -e "        There are two types of ${WHITE}\"detections\"${NOCOLOR}:\n"
+    echo -e "            ${WHITE}\"suspicious files\"${NOCOLOR} are files that contain things that -may- be"
+    echo -e "            malicious.\n"
+    echo -e "            ${WHITE}\"malware\"${NOCOLOR} is definitely malicious software.\n\n\n\n\n"
+    echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
+    read FHT_CHOICE
+    case "$FHT_CHOICE" in
+
+        M) GET_INSTRUCTIONS
+            ;;
+        m) GET_INSTRUCTIONS
+            ;;
+        Q) printf "\n\n\n"
+           exit 0
+            ;;
+        q) printf "\n\n\n"
+           exit 0
+            ;;
+        *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
+           sleep 2
+           FINDBOT_HELPTEXT
+            ;;
+    esac
 
 }
+
+MALDET_HELPTEXT () {
+
+    clear
+    HEADER
+    echo -e "    ${WHITE}MALDET HELPTEXT${NOCOLOR}"
+    DIVIDER
+    echo -e "    ${BLUE}Detailed Information here${NOCOLOR} ${GREEN}===> ${WHITE}https://www.rfxn.com/appdocs/README.maldetect${NOCOLOR}\n"
+    echo -e "    Linux Malware Detect (LMD) is a malware scanner for Linux released under the"
+    echo -e "    GNU GPLv2 license, that is designed around the threats faced in shared hosted"
+    echo -e "    environments. It uses threat data from network edge intrusion detection systems"
+    echo -e "    to extract malware that is actively being used in attacks and generates"
+    echo -e "    signatures for detection. In addition, threatdata is also derived from user"
+    echo -e "    submissions with the LMD checkout feature and from malware community resources."
+    echo -e "    The signatures that LMD uses are MD5 file hashes and HEX pattern matches, they"
+    echo -e "    are also easily exported to any number of detection tools such as ClamAV.\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}ex${CYAN}BOMBER ${WHITE}MALDET Options${NOCOLOR}:\n"
+    echo -e "        ${WHITE}ES${NOCOLOR} - Scans the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver"
+    echo -e "        ${WHITE}UD${NOCOLOR} - Scans the ${WHITE}U${NOCOLOR}ser ${WHITE}D${NOCOLOR}irectories:"
+    echo -e "             ${WHITE}/home/*${NOCOLOR}"
+    echo -e "        ${WHITE}CP${NOCOLOR} - Scans the user provided ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Results${NOCOLOR}:\n"
+    echo -e "        In addition to Maldet's default logs, ${WHITE}ex${CYAN}BOMBER${NOCOLOR} Maldet scans will be written to:\n"
+    echo -e "            ${WHITE}/var/www/exb_logs/maldet/${NOCOLOR}<log>\n"
+    echo -e "        A pastebin of the log will also be provided.\n\n\n"
+    echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
+    read MHT_CHOICE
+    case "$MHT_CHOICE" in
+
+        M) GET_INSTRUCTIONS
+            ;;
+        m) GET_INSTRUCTIONS
+            ;;
+        Q) printf "\n\n\n"
+           exit 0
+            ;;
+        q) printf "\n\n\n"
+           exit 0
+            ;;
+        *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
+           sleep 2
+           MALDET_HELPTEXT
+            ;;
+    esac
+
+}
+
+
 
 ############################
 ##------------------------##
