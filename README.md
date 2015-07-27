@@ -1,7 +1,7 @@
 # exBOMBER
 ### A linux server hack/exploit-finder suite
 
-- Launches choice exploit scanner in detached subshell
+- Launches choice hack/exploit scanner in detached subshell
     - findbot.pl    - Working
     - maldet        - Working
     - php site scan - In development
