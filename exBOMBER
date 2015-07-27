@@ -794,7 +794,7 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
         clear
         HEADER
-        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
         echo -e "    Upon completion, scan pastefile will be moved to:\n"
         echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
         echo -e "    (Provides fallback results presentation if email fails to send)\n"
@@ -811,7 +811,7 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
         clear
         HEADER
-        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
         echo -e "    Upon completion, scan pastefile will be moved to:\n"
         echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
         echo -e "    (Provides fallback results presentation if email fails to send)\n"
@@ -832,7 +832,7 @@ elif [ "$SCAN_TYPE" = "MD" ]; then
     sleep 2
     clear
     HEADER
-    echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+    echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
     echo -e "    Upon completion, scan pastefile will be moved to:\n"
     echo -e "                ${WHITE}/var/log/exb_logs/maldet/maldet_pastefile_${GREEN}timestamp${NOCOLOR}\n"
     echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
