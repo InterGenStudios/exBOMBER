@@ -1,5 +1,5 @@
 # exBOMBER
-### A linux server hack/exploit finder
+### A linux server hack/exploit finder suite
 
 - Launches choice exploit scanner in detached subshell
     - findbot.pl    - Working
