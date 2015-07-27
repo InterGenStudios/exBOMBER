@@ -622,7 +622,13 @@ F_TURBO_SEARCH () {
     /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" &&
     if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
 
-        echo NO HITS! SYSTEM IS CLEAN! > /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP"
+        {
+        echo -e "\n    =========================================="
+        echo -e "    FINDBOT.PL scan ran on $TIMESTAMP"
+        echo -e "    ==========================================\n\n"
+        echo -e "    NO HITS! SYSTEM IS CLEAN!\n\n"
+        echo -e "    Regards,\n\n      -exBOMBER\n\n"
+        } >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP"
 
     fi
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
@@ -652,7 +658,13 @@ F_SEARCH () {
     /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
     if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
 
-        echo NO HITS! SYSTEM IS CLEAN! > /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP"
+        {
+        echo -e "\n    =========================================="
+        echo -e "    FINDBOT.PL scan ran on $TIMESTAMP"
+        echo -e "    ==========================================\n\n"
+        echo -e "    NO HITS! SYSTEM IS CLEAN!\n\n"
+        echo -e "    Regards,\n\n      -exBOMBER\n\n"
+        } > /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP"
 
     fi
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
