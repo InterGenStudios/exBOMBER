@@ -539,6 +539,7 @@ DETACH () {
 
 }
 
+# findbot.pl scan with -c option
 F_TURBO_SEARCH () {
 
     /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" &&
@@ -560,6 +561,7 @@ F_TURBO_SEARCH () {
 
 }
 
+# standard findbot.pl scan
 F_SEARCH () {
 
     /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
@@ -581,6 +583,7 @@ F_SEARCH () {
 
 }
 
+# maldet scan
 M_SEARCH () {
 
     maldet -a $SEARCH_PATHS >> /var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" &&
@@ -615,11 +618,11 @@ M_SEARCH () {
 #############################################
 
 if [ "$(id -u)" != "0" ]; then
-    echo -e "\n\n${RED}${BLINK}--------${NOCOLOR}"
-    echo -e "${RED}${BLINK}WARNING!${NOCOLOR}"
-    echo -e "${RED}${BLINK}--------${NOCOLOR}\n\n"
-    echo -e "${WHITE}ex${CYAN}BOMBER ${WHITE}must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
-    echo -e "(Exiting now...)\n\n"
+    echo -e "\n\n    ${RED}${BLINK}--------${NOCOLOR}"
+    echo -e "    ${RED}${BLINK}WARNING!${NOCOLOR}"
+    echo -e "    ${RED}${BLINK}--------${NOCOLOR}\n\n"
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
+    echo -e "    (Exiting now...)\n\n"
     exit 1
 fi
 
