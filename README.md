@@ -5,7 +5,7 @@
     - findbot.pl    - Working
     - maldet        - Working
     - php site scan - In development
-- Provides scan logfile for 'tail -f'
+- Provides scan logfile for 'tail -f' - Working
 - Provides pastebin of results - Working
 - Emails results - In development
 
