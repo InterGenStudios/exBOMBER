@@ -87,11 +87,11 @@ GET_INSTRUCTIONS () {
 
     clear
     HEADER
-    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select scanner${NOCOLOR}:\n\n\n"
+    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select Scanner${NOCOLOR}:\n\n\n"
     echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)\n"
     echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)\n"
     echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n\n"
-    echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Selection${NOCOLOR}]: "
+    echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Sanner Selection${NOCOLOR}(q for quit)]: "
     read -r get_instructions
     case $get_instructions in
 
@@ -143,6 +143,14 @@ GET_INSTRUCTIONS () {
       2-i) MALDET_HELPTEXT
            ;;
       3-i) PHP_SITE_SCAN_HELPTEXT
+           ;;
+    [q,Q]) clear
+           HEADER
+           mkdir -p /root/support/exBOMBER/tmp
+           touch  /root/support/exBOMBER/tmp/QUIT
+           echo -e "    Exiting...\n\n\n"
+           sleep 2
+           exit 0
            ;;
         *) printf "\n" # Loop invalid entries
            echo -e "    ${RED}${BLINK}INVALID SELECTION${NOCOLOR}\n\n    Please choose again"
