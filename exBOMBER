@@ -87,10 +87,10 @@ GET_INSTRUCTIONS () {
 
     clear
     HEADER
-    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select an operation${NOCOLOR}:\n\n"
-    echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)"
-    echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)"
-    echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n"
+    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select an operation${NOCOLOR}:\n\n\n"
+    echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)\n"
+    echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)\n"
+    echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n\n"
     echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Selection${NOCOLOR}]: "
     read -r get_instructions
     case $get_instructions in
@@ -186,7 +186,12 @@ FINDBOT_HELPTEXT () {
 
         [m,M]) GET_INSTRUCTIONS
                ;;
-        [q,Q]) printf "\n\n\n"
+        [q,Q]) clear
+               HEADER
+               mkdir -p /root/support/exBOMBER/tmp
+               touch  /root/support/exBOMBER/tmp/QUIT
+               echo -e "    Exiting...\n\n\n"
+               sleep 2
                exit 0
                ;;
             *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}" # Loop invalid entries
@@ -229,7 +234,12 @@ MALDET_HELPTEXT () {
 
         [m,M]) GET_INSTRUCTIONS
                ;;
-        [q,Q]) printf "\n\n\n"
+        [q,Q]) clear
+               HEADER
+               mkdir -p /root/support/exBOMBER/tmp
+               touch  /root/support/exBOMBER/tmp/QUIT
+               echo -e "    Exiting...\n\n\n"
+               sleep 2
                exit 0
                ;;
             *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}" # Loop invalid entries
@@ -253,7 +263,12 @@ PHP_SITE_SCAN_HELPTEXT () {
 
         [m,M]) GET_INSTRUCTIONS
                ;;
-        [q,Q]) printf "\n\n\n"
+        [q,Q]) clear
+               HEADER
+               mkdir -p /root/support/exBOMBER/tmp
+               touch  /root/support/exBOMBER/tmp/QUIT
+               echo -e "    Exiting...\n\n\n"
+               sleep 2
                exit 0
                ;;
             *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}" # Loop invalid entries
@@ -769,87 +784,96 @@ fi
 # Create log file location
 mkdir -p /var/log/exb_logs/exBOMBER
 GET_INSTRUCTIONS 2>&1 | tee /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
-# sed command to remove messy terminal color variables from logs
-sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
--e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
--e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' -e 's|\[2A\[K||g' /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
-clear
-HEADER
-# Pull subshell-generated variables into parent shell
-SCAN_TYPE="$(grep SCAN_TYPE /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-SEARCH_PATHS="$(grep SEARCH_PATHS /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-TURBO_OPTION="$(grep TURBO_OPTION /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-EMAIL_ADDR="$(grep EMAIL_ADDR /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-if [ "$SCAN_TYPE" = "FB" ]; then
+if [ -f "/root/support/exBOMBER/tmp/QUIT" ]; then
 
-    rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
-    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
-    DIVIDER
-    echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
-    sleep 2
-
-    if [ "$TURBO_OPTION" = "ON" ]; then
-
-        tput cuu 1 && tput el
-        echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
-        clear
-        HEADER
-        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
-        echo -e "    Upon completion, scan pastefile will be moved to:\n"
-        echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
-        echo -e "    (Provides fallback results presentation if email fails to send)\n"
-        echo -e "    FINDBOT.PL scan progress can be observed with:\n"
-        # Provide logfile for scan observation if needed
-        echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n" &
-        # Start scan in 'detached' subshell
-        DETACH F_TURBO_SEARCH
-        exit 0
-
-    else
-
-        tput cuu 1 && tput el
-        echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
-        clear
-        HEADER
-        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
-        echo -e "    Upon completion, scan pastefile will be moved to:\n"
-        echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
-        echo -e "    (Provides fallback results presentation if email fails to send)\n"
-        echo -e "    FINDBOT.PL scan progress can be observed with:\n"
-        # Provide logfile for scan observation if needed
-        echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n" &
-        # Start scan in 'detached' subshell
-        DETACH F_SEARCH
-        exit 0
-    fi
-
-elif [ "$SCAN_TYPE" = "MD" ]; then
-
-    rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
-    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
-    DIVIDER
-    echo -e "    ${GREEN}Starting ${WHITE}MALDET${GREEN} Scan..."
-    sleep 2
-    clear
-    HEADER
-    echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
-    echo -e "    Upon completion, scan pastefile will be moved to:\n"
-    echo -e "                ${WHITE}/var/log/exb_logs/maldet/maldet_pastefile_${GREEN}timestamp${NOCOLOR}\n"
-    echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
-    echo -e "    MALDET scan progress can be observed with:\n"
-    # Provide logfile for scan observation if needed
-    echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n" &
-    # Start scan in 'detached' subshell
-    DETACH M_SEARCH
+    rm /root/support/exBOMBER/tmp/QUIT
     exit 0
 
 else
 
-    # NEED TO DEVELOP PHP_SITE_SCAN RE: http://www.gregfreeman.org/2013/how-to-tell-if-your-php-site-has-been-compromised/
-    rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
-    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
-    DIVIDER
-    echo -e "    ${YELLOW}IN DEVELOPMENT - CHECK BACK SOON${NOCOLOR}"
+    # sed command to remove messy terminal color variables from logs
+    sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+    -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+    -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' -e 's|\[2A\[K||g' /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
+    clear
+    HEADER
+    # Pull subshell-generated variables into parent shell
+    SCAN_TYPE="$(grep SCAN_TYPE /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    SEARCH_PATHS="$(grep SEARCH_PATHS /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    TURBO_OPTION="$(grep TURBO_OPTION /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    EMAIL_ADDR="$(grep EMAIL_ADDR /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    if [ "$SCAN_TYPE" = "FB" ]; then
+
+        rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
+        DIVIDER
+        echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
+        sleep 2
+
+        if [ "$TURBO_OPTION" = "ON" ]; then
+
+            tput cuu 1 && tput el
+            echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
+            clear
+            HEADER
+            echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
+            echo -e "    Upon completion, scan pastefile will be moved to:\n"
+            echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
+            echo -e "    (Provides fallback results presentation if email fails to send)\n"
+            echo -e "    FINDBOT.PL scan progress can be observed with:\n"
+            # Provide logfile for scan observation if needed
+            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n" &
+            # Start scan in 'detached' subshell
+            DETACH F_TURBO_SEARCH
+            exit 0
+
+        else
+
+            tput cuu 1 && tput el
+            echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
+            clear
+            HEADER
+            echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
+            echo -e "    Upon completion, scan pastefile will be moved to:\n"
+            echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
+            echo -e "    (Provides fallback results presentation if email fails to send)\n"
+            echo -e "    FINDBOT.PL scan progress can be observed with:\n"
+            # Provide logfile for scan observation if needed
+            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n" &
+            # Start scan in 'detached' subshell
+            DETACH F_SEARCH
+            exit 0
+        fi
+
+    elif [ "$SCAN_TYPE" = "MD" ]; then
+
+        rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
+        DIVIDER
+        echo -e "    ${GREEN}Starting ${WHITE}MALDET${GREEN} Scan..."
+        sleep 2
+        clear
+        HEADER
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
+        echo -e "    Upon completion, scan pastefile will be moved to:\n"
+        echo -e "                ${WHITE}/var/log/exb_logs/maldet/maldet_pastefile_${GREEN}timestamp${NOCOLOR}\n"
+        echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
+        echo -e "    MALDET scan progress can be observed with:\n"
+        # Provide logfile for scan observation if needed
+        echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n" &
+        # Start scan in 'detached' subshell
+        DETACH M_SEARCH
+        exit 0
+
+    else
+
+        # NEED TO DEVELOP PHP_SITE_SCAN RE: http://www.gregfreeman.org/2013/how-to-tell-if-your-php-site-has-been-compromised/
+        rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
+        DIVIDER
+        echo -e "    ${YELLOW}IN DEVELOPMENT - CHECK BACK SOON${NOCOLOR}\n\n\n"
+
+    fi
 
 fi
 
