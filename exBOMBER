@@ -78,20 +78,6 @@ HEADER () {
 # END - DISPLAY LAYOUT FUNCTIONS #
 #--------------------------------#
 
-ID_PANEL () {
-
-    if [ -d /usr/local/cpanel ]; then
-        PANEL="WHM"
-    elif [ -d /usr/local/psa ]; then
-        PANEL="Plesk"
-    elif [ -d /usr/local/directadmin ]; then
-        PANEL="DirectAdmin"
-    else
-        PANEL="Unknown"
-    fi
-
-}
-
 GET_INSTRUCTIONS () {
 
     clear
@@ -103,34 +89,37 @@ GET_INSTRUCTIONS () {
     echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Selection${NOCOLOR}]: "
     read -r get_instructions
     case $get_instructions in
-        1) SCAN_TYPE=FB
+        1) echo SCAN_TYPE = FB > /root/support/exBOMBER/scan_config
+           SCAN_TYPE=FB
            mkdir -p /var/log/exb_logs/findbot
-           CHECK_FOR_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/chk_fbt_"$TIMESTAMP" &&
+           CHECK_FOR_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/chk_fbt_"$TIMESTAMP"
            sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
-           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/findbot/chk_fbt_"$TIMESTAMP" &
-           EXEC_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/exec_fbt_"$TIMESTAMP" &&
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/findbot/chk_fbt_"$TIMESTAMP"
+           EXEC_FINDBOT 2>&1 | tee /var/log/exb_logs/findbot/exec_fbt_"$TIMESTAMP"
            sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
-           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/findbot/exec_fbt_"$TIMESTAMP" &
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/findbot/exec_fbt_"$TIMESTAMP"
             ;;
-        2) SCAN_TYPE=MD
+        2) echo SCAN_TYPE = MD > /root/support/exBOMBER/scan_config
+           SCAN_TYPE=MD
            mkdir -p /var/log/exb_logs/maldet
-           CHECK_FOR_MALDET 2>&1 | tee /var/log/exb_logs/maldet/chk_mldt_"$TIMESTAMP" &&
+           CHECK_FOR_MALDET 2>&1 | tee /var/log/exb_logs/maldet/chk_mldt_"$TIMESTAMP"
            sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
-           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/maldet/chk_mldt_"$TIMESTAMP" &
-           EXEC_MALDET 2>&1 | tee /var/log/exb_logs/maldet/exec_mldt_"$TIMESTAMP" &&
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/maldet/chk_mldt_"$TIMESTAMP"
+           EXEC_MALDET 2>&1 | tee /var/log/exb_logs/maldet/exec_mldt_"$TIMESTAMP"
            sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
-           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/maldet/exec_mldt_"$TIMESTAMP" &
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/maldet/exec_mldt_"$TIMESTAMP"
             ;;
-        3) SCAN_TYPE=PS
+        3) echo SCAN_TYPE = PS > /root/support/exBOMBER/scan_config
+           SCAN_TYPE=PS
            mkdir -p /var/log/exb_logs/php_scan
-           EXEC_PHP_SITE_SCAN 2>&1 | tee /var/log/exb_logs/php_scan/site_scan_"$TIMESTAMP" &&
+           EXEC_PHP_SITE_SCAN 2>&1 | tee /var/log/exb_logs/php_scan/site_scan_"$TIMESTAMP"
            sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
-           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/php_scan/site_scan_"$TIMESTAMP" &
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/php_scan/site_scan_"$TIMESTAMP"
             ;;
         1-i) FINDBOT_HELPTEXT
             ;;
@@ -176,14 +165,9 @@ FINDBOT_HELPTEXT () {
     read -r FHT_CHOICE
     case "$FHT_CHOICE" in
 
-        M) GET_INSTRUCTIONS
+    [m,M]) GET_INSTRUCTIONS
             ;;
-        m) GET_INSTRUCTIONS
-            ;;
-        Q) printf "\n\n\n"
-           exit 0
-            ;;
-        q) printf "\n\n\n"
+    [q,Q]) printf "\n\n\n"
            exit 0
             ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
@@ -223,14 +207,9 @@ MALDET_HELPTEXT () {
     read -r MHT_CHOICE
     case "$MHT_CHOICE" in
 
-        M) GET_INSTRUCTIONS
+    [m,M]) GET_INSTRUCTIONS
             ;;
-        m) GET_INSTRUCTIONS
-            ;;
-        Q) printf "\n\n\n"
-           exit 0
-            ;;
-        q) printf "\n\n\n"
+    [q,Q]) printf "\n\n\n"
            exit 0
             ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
@@ -252,14 +231,9 @@ PHP_SITE_SCAN_HELPTEXT () {
     read -r PHT_CHOICE
     case "$PHT_CHOICE" in
 
-        M) GET_INSTRUCTIONS
+    [m,M]) GET_INSTRUCTIONS
             ;;
-        m) GET_INSTRUCTIONS
-            ;;
-        Q) printf "\n\n\n"
-           exit 0
-            ;;
-        q) printf "\n\n\n"
+    [q,Q]) printf "\n\n\n"
            exit 0
             ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}"
@@ -342,44 +316,59 @@ EXEC_FINDBOT () {
     read -r E_F_SELECTION
     case $E_F_SELECTION in
         1) tput cuu 2 && tput el
+           echo SEARCH_PATHS = / >> /root/support/exBOMBER/scan_config
            SEARCH_PATHS="/"
            echo -e "\n    FINDBOT.PL will search the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver\n"
            echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n"
            echo -e -n "    Enable Experimental ${WHITE}\"-c\"${NOCOLOR} (turbo) Option for FINDBOT.PL (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})? "
            read -r F_TURBO_OPTION
            case $F_TURBO_OPTION in
-               [y,Y]) TURBO_OPTION=ON
-                      echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
-                      sleep 2
-                      ;;
-                   *) TURBO_OPTION=OFF
-                      echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
-                      sleep 2
-                      ;;
+                [y,Y]) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=ON
+                       echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
+                   -c) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=ON
+                       echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
+                    *) echo TURBO_OPTION = OFF >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=OFF
+                       echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
            esac
            GET_NOTIFY_DESTINATION
-           SEARCH
            ;;
         2) tput cuu 2 && tput el
            if [ "$F_PATH_TYPE" = "TRI" ]; then
+               echo SEARCH_PATHS = /tmp /usr/tmp /home >> /root/support/exBOMBER/scan_config
                SEARCH_PATHS="/tmp /usr/tmp /home"
            else
+               echo SEARCH_PATHS = /tmp /usr/tmp /home /var/www >> /root/support/exBOMBER/scan_config
                SEARCH_PATHS="/tmp /usr/tmp /home /var/www"
            fi
            echo -e "\n    FINDBOT.PL will search ${WHITE}$SEARCH_PATHS${NOCOLOR}\n"
            echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
            case $F_TURBO_OPTION in
-               [y,Y]) TURBO_OPTION=ON
-                      echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
-                      sleep 2
-                      ;;
-                   *) TURBO_OPTION=OFF
-                      echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
-                      sleep 2
-                      ;;
+                [y,Y]) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=ON
+                       echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
+                   -c) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=ON
+                       echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
+                    *) echo TURBO_OPTION = OFF >> /root/support/exBOMBER/scan_config
+                       TURBO_OPTION=OFF
+                       echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
+                       sleep 2
+                       ;;
            esac
            GET_NOTIFY_DESTINATION
-           SEARCH
            ;;
         3) tput cuu 2 && tput el
            echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
@@ -388,20 +377,27 @@ EXEC_FINDBOT () {
            if [ -d "$CUSTOM_PATH" ]; then
                tput cuu 2 && tput el
                echo -e "\n    FINDBOT.PL will search ${WHITE}$CUSTOM_PATH${NOCOLOR}\n\n"
+               echo SEARCH_PATHS = "$CUSTOM_PATH" >> /root/support/exBOMBER/scan_config
                echo -e -n "    Enable Experimental ${WHITE}\"-c\"${NOCOLOR} (turbo) Option for FINDBOT.PL (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})? "
                read -r F_TURBO_OPTION
                case $F_TURBO_OPTION in
-                   [y,Y]) TURBO_OPTION=ON
-                          echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
-                          sleep 2
-                          ;;
-                       *) TURBO_OPTION=OFF
-                          echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
-                          sleep 2
-                          ;;
+                    [y,Y]) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                           TURBO_OPTION=ON
+                           echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                           sleep 2
+                           ;;
+                       -c) echo TURBO_OPTION = ON >> /root/support/exBOMBER/scan_config
+                           TURBO_OPTION=ON
+                           echo -e "\n    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n\n"
+                           sleep 2
+                           ;;
+                        *) echo TURBO_OPTION = OFF >> /root/support/exBOMBER/scan_config
+                           TURBO_OPTION=OFF
+                           echo -e "\n    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n\n"
+                           sleep 2
+                           ;;
                esac
                GET_NOTIFY_DESTINATION
-               SEARCH
            else
                echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
                sleep 2
@@ -442,7 +438,6 @@ EXEC_MALDET () {
            echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
            sleep 2
            GET_NOTIFY_DESTINATION
-           SEARCH
            ;;
         2) tput cuu 2 && tput el
            if [ "$M_PATH_TYPE" = "TRI" ]; then
@@ -456,7 +451,6 @@ EXEC_MALDET () {
            echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
            sleep 2
            GET_NOTIFY_DESTINATION
-           SEARCH
            ;;
         3) tput cuu 2 && tput el
            echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
@@ -467,7 +461,6 @@ EXEC_MALDET () {
                echo -e "\n    MALDET will search ${WHITE}$CUSTOM_PATH${NOCOLOR}\n\n\n\n"
                sleep 2
                GET_NOTIFY_DESTINATION
-               SEARCH
            else
                echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
                sleep 2
@@ -503,6 +496,7 @@ GET_NOTIFY_DESTINATION () {
     case $EMAIL_ADDR_VERIFY in
         [y,Y]) tput cuu 1 && tput el
                echo -e "\n    Set Notification Email Address to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n\n"
+               echo EMAIL_ADDR = "$EMAIL_ADDR" >> /root/support/exBOMBER/scan_config
                ;;
             *) tput cuu 1 && tput el
                echo -e "\n    ${RED}RE-ENTER NOTIFICATION EMAIL${NOCOLOR}\n\n"
@@ -525,90 +519,45 @@ DETACH () {
 
 }
 
-SEARCH () {
+F_TURBO_SEARCH () {
 
-    clear
-    HEADER
-    if [ "$SCAN_TYPE" = "FB" ]; then
-        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
-        DIVIDER
-        echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
-        sleep 2
-        if [ "$TURBO_OPTION" = "ON" ]; then
-            tput cuu 1 && tput el
-            echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
-            echo "$TIMESTAMP" > /root/support/exBOMBER/timestamp
-
-            F_TURBO_SEARCH () {
-
-                stamp=$(cat /root/support/exBOMBER/timestamp)
-                /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$stamp" &&
-                curl -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
-                text@/var/log/exb_logs/findbot/turbo_scan_"$stamp" http://nobits.ml/api/create \
-                > /root/support/exBOMBER/findbot_pastefile
-                SUBJECT=FINDBOT_SCAN_$stamp
-                {
-                echo TO: "$EMAIL_ADDR"
-                echo " "
-                echo FROM: exBOMBER
-                echo " "
-                echo SUBJECT: "$SUBJECT"
-                echo " "
-                echo Results are at: "$(cat /root/support/exBOMBER/findbot_pastefile)"
-                } >> /root/support/exBOMBER/f_scan_email
-                mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/f_scan_email 2>&1 >/dev/null
-                rm /root/support/exBOMBER/f_scan_email /root/support/exBOMBER/timestamp /root/support/exBOMBER/findbot_pastefile
-
-            }
-
-            DETACH F_TURBO_SEARCH
-            echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR upon completion\n"
-            echo -e "    Scan progress can be observed with:\n"
-            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$stamp\n\n\n" &
-            exit 0
-        else
-            tput cuu 1 && tput el
-            echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
-            echo "$TIMESTAMP" > /root/support/exBOMBER/timestamp
-
-            F_SEARCH () {
-
-                stamp=$(cat /root/support/exBOMBER/timestamp)
-                /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$stamp" &&
-                curl -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
-                text@/var/log/exb_logs/findbot/standard_scan_"$stamp" http://nobits.ml/api/create \
-                > /root/support/exBOMBER/findbot_pastefile
-                SUBJECT=FINDBOT_SCAN_$stamp
-                {
-                echo TO: "$EMAIL_ADDR"
-                echo " "
-                echo FROM: exBOMBER
-                echo " "
-                echo SUBJECT: "$SUBJECT"
-                echo " "
-                echo Results are at: "$(cat /root/support/exBOMBER/findbot_pastefile)"
-                } >> /root/support/exBOMBER/f_scan_email
-                mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/f_scan_email 2>&1 >/dev/null
-                rm /root/support/exBOMBER/f_scan_email /root/support/exBOMBER/timestamp /root/support/exBOMBER/findbot_pastefile
-
-            }
-
-            DETACH F_SEARCH
-            echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR upon completion\n"
-            echo -e "    Scan progress can be observed with:\n"
-            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$stamp\n\n\n" &
-            exit 0
-        fi
-    elif [ "$SCAN_TYPE" = "MD" ]; then
-        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
-        DIVIDER
-    else
-        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
-        DIVIDER
-    fi
+    /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" &&
+    curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
+    text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
+    > /root/support/exBOMBER/findbot_pastefile
+    {
+    echo TO: "$EMAIL_ADDR"
+    echo " "
+    echo FROM: exBOMBER
+    echo " "
+    echo SUBJECT: FINDBOT_SCAN_"$TIMESTAMP"
+    echo " "
+    echo Results are at: "$(cat /root/support/exBOMBER/findbot_pastefile)"
+    } >> /root/support/exBOMBER/f_scan_email
+    mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/f_scan_email 2>&1 >/dev/null
+    rm /root/support/exBOMBER/f_scan_email /root/support/exBOMBER/timestamp /root/support/exBOMBER/findbot_pastefile
 
 }
 
+F_SEARCH () {
+
+    /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
+    curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
+    text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
+    > /root/support/exBOMBER/findbot_pastefile
+    {
+    echo TO: "$EMAIL_ADDR"
+    echo " "
+    echo FROM: exBOMBER
+    echo " "
+    echo SUBJECT: FINDBOT_SCAN_"$TIMESTAMP"
+    echo " "
+    echo Results are at: "$(cat /root/support/exBOMBER/findbot_pastefile)"
+    } >> /root/support/exBOMBER/f_scan_email
+    mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/f_scan_email 2>&1 >/dev/null
+    rm /root/support/exBOMBER/f_scan_email /root/support/exBOMBER/timestamp /root/support/exBOMBER/findbot_pastefile
+
+}
 
 ############################
 ##------------------------##
@@ -643,12 +592,62 @@ fi
 ##---------------------##
 #########################
 
-ID_PANEL
+if [ -d /usr/local/cpanel ]; then
+    PANEL="WHM"
+elif [ -d /usr/local/psa ]; then
+    PANEL="Plesk"
+elif [ -d /usr/local/directadmin ]; then
+    PANEL="DirectAdmin"
+else
+    PANEL="Unknown"
+fi
 mkdir -p /var/log/exb_logs/exBOMBER
-GET_INSTRUCTIONS 2>&1 | tee /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP" &
+GET_INSTRUCTIONS 2>&1 | tee /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
 sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
 -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
--e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
+-e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
+clear
+HEADER
+SCAN_TYPE="$(grep SCAN_TYPE /root/support/exBOMBER/scan_config | awk '{print $3}')"
+SEARCH_PATHS="$(grep SEARCH_PATHS /root/support/exBOMBER/scan_config | awk '{print $3}')"
+TURBO_OPTION="$(grep TURBO_OPTION /root/support/exBOMBER/scan_config | awk '{print $3}')"
+EMAIL_ADDR="$(grep EMAIL_ADDR /root/support/exBOMBER/scan_config | awk '{print $3}')"
+if [ "$SCAN_TYPE" = "FB" ]; then
+    rm /root/support/exBOMBER/scan_config
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
+    DIVIDER
+    echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
+    sleep 2
+    if [ "$TURBO_OPTION" = "ON" ]; then
+        tput cuu 1 && tput el
+        echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
+        clear
+        HEADER
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    FINDBOT.PL scan progress can be observed with:\n"
+        echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n" &
+        DETACH F_TURBO_SEARCH
+        exit 0
+    else
+        tput cuu 1 && tput el
+        echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
+        clear
+        HEADER
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    FINDBOT.PL scan progress can be observed with:\n"
+        echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n" &
+        DETACH F_SEARCH
+        exit 0
+    fi
+elif [ "$SCAN_TYPE" = "MD" ]; then
+    rm /root/support/exBOMBER/scan_config
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
+    DIVIDER
+else
+    rm /root/support/exBOMBER/scan_config
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
+    DIVIDER
+fi
 
 #######################
 ##-------------------##
