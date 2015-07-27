@@ -87,7 +87,7 @@ GET_INSTRUCTIONS () {
 
     clear
     HEADER
-    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select an operation${NOCOLOR}:\n\n\n"
+    echo -e "    ${GREEN}${UNDERLINE_TEXT}Select scanner${NOCOLOR}:\n\n\n"
     echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)\n"
     echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)\n"
     echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n\n"
