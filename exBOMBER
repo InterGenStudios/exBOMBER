@@ -603,13 +603,10 @@ F_TURBO_SEARCH () {
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile
     {
-    echo TO: "$EMAIL_ADDR"
-    echo " "
-    echo FROM: exBOMBER
-    echo " "
-    echo SUBJECT: FINDBOT_SCAN_"$TIMESTAMP"
-    echo " "
-    echo Results are at: "$(cat /root/support/exBOMBER/tmp/findbot_pastefile)"
+    echo -e "TO: $EMAIL_ADDR\n"
+    echo -e "FROM: exBOMBER\n"
+    echo -e "SUBJECT: FINDBOT_SCAN_$TIMESTAMP\n\n"
+    echo -e "Results are at: $(cat /root/support/exBOMBER/tmp/findbot_pastefile)\n"
     } >> /root/support/exBOMBER/tmp/f_scan_email
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/f_scan_email 2>&1 >/dev/null
     rm /root/support/exBOMBER/tmp/f_scan_email /root/support/exBOMBER/tmp/findbot_pastefile
@@ -625,13 +622,10 @@ F_SEARCH () {
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile
     {
-    echo TO: "$EMAIL_ADDR"
-    echo " "
-    echo FROM: exBOMBER
-    echo " "
-    echo SUBJECT: FINDBOT_SCAN_"$TIMESTAMP"
-    echo " "
-    echo Results are at: "$(cat /root/support/exBOMBER/tmp/findbot_pastefile)"
+    echo -e "TO: $EMAIL_ADDR\n"
+    echo -e "FROM: exBOMBER\n"
+    echo -e "SUBJECT: FINDBOT_SCAN_$TIMESTAMP\n\n"
+    echo -e "Results are at: $(cat /root/support/exBOMBER/tmp/findbot_pastefile)\n"
     } >> /root/support/exBOMBER/tmp/f_scan_email
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/f_scan_email 2>&1 >/dev/null
     rm /root/support/exBOMBER/tmp/f_scan_email /root/support/exBOMBER/tmp/findbot_pastefile
@@ -647,13 +641,10 @@ M_SEARCH () {
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/maldet_pastefile
     {
-    echo TO: "$EMAIL_ADDR"
-    echo " "
-    echo FROM: exBOMBER
-    echo " "
-    echo SUBJECT: MALDET_SCAN_"$TIMESTAMP"
-    echo " "
-    echo Results are at: "$(cat /root/support/exBOMBER/tmp/maldet_pastefile)"
+    echo -e "TO: $EMAIL_ADDR\n"
+    echo -e "FROM: exBOMBER\n"
+    echo -e "SUBJECT: MALDET_SCAN_$TIMESTAMP\n\n"
+    echo -e "Results are at: $(cat /root/support/exBOMBER/tmp/maldet_pastefile)\n"
     } >> /root/support/exBOMBER/tmp/m_scan_email
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/m_scan_email 2>&1 >/dev/null
     rm /root/support/exBOMBER/tmp/m_scan_email /root/support/exBOMBER/tmp/maldet_pastefile
