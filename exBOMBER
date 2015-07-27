@@ -816,7 +816,7 @@ else
         rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
         echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL Scan${NOCOLOR}"
         DIVIDER
-        echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan..."
+        echo -e "    ${GREEN}Starting ${WHITE}FINDBOT.PL${GREEN} Scan...${NOCOLOR}"
         sleep 2
 
         if [ "$TURBO_OPTION" = "ON" ]; then
@@ -831,7 +831,7 @@ else
             echo -e "    (Provides fallback results presentation if email fails to send)\n"
             echo -e "    FINDBOT.PL scan progress can be observed with:\n"
             # Provide logfile for scan observation if needed
-            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n" &
+            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
             DETACH F_TURBO_SEARCH
             exit 0
@@ -848,7 +848,7 @@ else
             echo -e "    (Provides fallback results presentation if email fails to send)\n"
             echo -e "    FINDBOT.PL scan progress can be observed with:\n"
             # Provide logfile for scan observation if needed
-            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n" &
+            echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
             DETACH F_SEARCH
             exit 0
@@ -869,7 +869,7 @@ else
         echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
         echo -e "    MALDET scan progress can be observed with:\n"
         # Provide logfile for scan observation if needed
-        echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n" &
+        echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
         # Start scan in 'detached' subshell
         DETACH M_SEARCH
         exit 0
