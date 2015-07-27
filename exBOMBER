@@ -256,7 +256,7 @@ PHP_SITE_SCAN_HELPTEXT () {
     HEADER
     echo -e "    ${WHITE}PHP SITE SCAN HELPTEXT${NOCOLOR}"
     DIVIDER
-    echo -e "    ${YELLOW}IN DEVELOPMENT\n\n\n"
+    echo -e "    ${YELLOW}IN DEVELOPMENT\n\n\n${NOCOLOR}"
     echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
     read -r PHT_CHOICE
     case "$PHT_CHOICE" in
