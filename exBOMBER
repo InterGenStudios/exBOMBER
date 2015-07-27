@@ -780,7 +780,8 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         clear
         HEADER
         echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
-        echo -e "    Scan pastefile will be moved to /var/log/exb_logs/findbot/findbot_pastefile_timestamp upon completion"
+        echo -e "    Upon completion, scan pastefile will be moved to:\n"
+        echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
         echo -e "    (Provides fallback results presentation if email fails to send)\n"
         echo -e "    FINDBOT.PL scan progress can be observed with:\n"
         # Provide logfile for scan observation if needed
@@ -796,7 +797,8 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         clear
         HEADER
         echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
-        echo -e "    Scan pastefile will be moved to /var/log/exb_logs/findbot/findbot_pastefile_timestamp upon completion"
+        echo -e "    Upon completion, scan pastefile will be moved to:\n"
+        echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
         echo -e "    (Provides fallback results presentation if email fails to send)\n"
         echo -e "    FINDBOT.PL scan progress can be observed with:\n"
         # Provide logfile for scan observation if needed
@@ -816,7 +818,8 @@ elif [ "$SCAN_TYPE" = "MD" ]; then
     clear
     HEADER
     echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
-    echo -e "    Scan pastefile will be moved to /var/log/exb_logs/maldet/maldet_pastefile_timestamp upon completion"
+    echo -e "    Upon completion, scan pastefile will be moved to:\n"
+    echo -e "                ${WHITE}/var/log/exb_logs/maldet/maldet_pastefile_${GREEN}timestamp${NOCOLOR}\n"
     echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
     echo -e "    MALDET scan progress can be observed with:\n"
     # Provide logfile for scan observation if needed
