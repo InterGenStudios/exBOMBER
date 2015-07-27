@@ -628,6 +628,7 @@ F_TURBO_SEARCH () {
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
+    sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -657,6 +658,7 @@ F_SEARCH () {
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
+    sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -681,6 +683,7 @@ M_SEARCH () {
     curl -s -d private=1 -d title=MALDET_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
+    sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
