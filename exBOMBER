@@ -616,7 +616,8 @@ GET_NOTIFY_DESTINATION () {
 
 DETACH () {
 
-    # Magic code to allow scan subshells to be 'detached' and ran in background, without sending anything back to our terminal
+    # Magic code allows scan subshells to be ran 'detached' in background
+    # without sending anything back to our terminal
     if test -t 1; then
 
         exec 1>/dev/null
