@@ -4,7 +4,7 @@ A linux server hack/exploit finder
 - Launches choice exploit scanner in detached subshell
     - findbot.pl    - Working
     - maldet        - Working
-    - php site scan - In Development
+    - php site scan - In development
 - Provides pastebin of results - Working
 - Emails results - In development
 
