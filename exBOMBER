@@ -620,6 +620,11 @@ DETACH () {
 F_TURBO_SEARCH () {
 
     /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" &&
+    if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
+
+        echo NO HITS! SYSTEM IS CLEAN! > /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP"
+
+    fi
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
@@ -631,8 +636,10 @@ F_TURBO_SEARCH () {
     } >> /root/support/exBOMBER/tmp/f_scan_email # Basic email template file
     # Email the results
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/f_scan_email 2>&1 >/dev/null
-    # Remove tmp files created during execution
-    rm /root/support/exBOMBER/tmp/f_scan_email /root/support/exBOMBER/tmp/findbot_pastefile
+    # Remove tmp file created during execution
+    rm /root/support/exBOMBER/tmp/f_scan_email
+    # Move pastefile into log directory
+    mv /root/support/exBOMBER/tmp/findbot_pastefile /var/log/exb_logs/findbot/findbot_pastefile_"$TIMESTAMP"
     # Exit cleanly in background
     exit 0
 
@@ -642,6 +649,11 @@ F_TURBO_SEARCH () {
 F_SEARCH () {
 
     /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
+    if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
+
+        echo NO HITS! SYSTEM IS CLEAN! > /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP"
+
+    fi
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
@@ -653,8 +665,10 @@ F_SEARCH () {
     } >> /root/support/exBOMBER/tmp/f_scan_email # Basic email template file
     # Email the results
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/f_scan_email 2>&1 >/dev/null
-    # Remove tmp files created during execution
-    rm /root/support/exBOMBER/tmp/f_scan_email /root/support/exBOMBER/tmp/findbot_pastefile
+    # Remove tmp file created during execution
+    rm /root/support/exBOMBER/tmp/f_scan_email
+    # Move pastefile into log directory
+    mv /root/support/exBOMBER/tmp/findbot_pastefile /var/log/exb_logs/findbot/findbot_pastefile_"$TIMESTAMP"
     # Exit cleanly in background
     exit 0
 
@@ -676,7 +690,9 @@ M_SEARCH () {
     # Email the results
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/m_scan_email 2>&1 >/dev/null
     # Remove tmp files created during execution
-    rm /root/support/exBOMBER/tmp/m_scan_email /root/support/exBOMBER/tmp/maldet_pastefile
+    rm /root/support/exBOMBER/tmp/m_scan_email
+    # Move pastefile into log directory
+    mv /root/support/exBOMBER/tmp/maldet_pastefile /var/log/exb_logs/maldet/maldet_pastefile_"$TIMESTAMP"
     # Exit cleanly in background
     exit 0
 
@@ -764,6 +780,8 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         clear
         HEADER
         echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    Scan pastefile will be moved to /var/log/exb_logs/findbot/findbot_pastefile_timestamp upon completion"
+        echo -e "    (Provides fallback results presentation if email fails to send)\n"
         echo -e "    FINDBOT.PL scan progress can be observed with:\n"
         # Provide logfile for scan observation if needed
         echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n" &
@@ -778,6 +796,8 @@ if [ "$SCAN_TYPE" = "FB" ]; then
         clear
         HEADER
         echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+        echo -e "    Scan pastefile will be moved to /var/log/exb_logs/findbot/findbot_pastefile_timestamp upon completion"
+        echo -e "    (Provides fallback results presentation if email fails to send)\n"
         echo -e "    FINDBOT.PL scan progress can be observed with:\n"
         # Provide logfile for scan observation if needed
         echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n" &
@@ -796,6 +816,8 @@ elif [ "$SCAN_TYPE" = "MD" ]; then
     clear
     HEADER
     echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR} upon completion\n"
+    echo -e "    Scan pastefile will be moved to /var/log/exb_logs/maldet/maldet_pastefile_timestamp upon completion"
+    echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
     echo -e "    MALDET scan progress can be observed with:\n"
     # Provide logfile for scan observation if needed
     echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n" &
