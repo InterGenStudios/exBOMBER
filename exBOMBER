@@ -717,7 +717,6 @@ F_SEARCH () {
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
-    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
@@ -752,7 +751,6 @@ M_SEARCH () {
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
-    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
