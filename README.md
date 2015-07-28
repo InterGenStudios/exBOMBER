@@ -4,7 +4,7 @@
 - Launches choice hack/exploit scanner in detached subshell
     - findbot.pl    - Working
     - maldet        - Working
-    - php site scan - In development
+    - PHPSiteScan - In development
 - Provides scan logfile for 'tail -f' - Working
 - Provides pastebin of results - Working
 - Emails results - Working
