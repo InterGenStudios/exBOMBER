@@ -4,10 +4,10 @@
 # PHPSiteScan: A PHP website hack/exploit-finder utility
 # version: .01
 # Github: https://github.com/InterGenStudios/exBOMBER/blob/master/PHPSiteScan
-# ---------------------------------------------------
+# ---------------------------------------------------------------------------
 # InterGenStudios: 7-28-15
 # Copyright (c) 2015: Christopher 'InterGen' Cork  InterGenStudios
-# --------------------------------
+# ----------------------------------------------------------------
 # License: GPL-2.0+
 # URL: http://opensource.org/licenses/gpl-license.php
 # ---------------------------------------------------
@@ -17,3 +17,195 @@
 # Foundation, either version 2 of the License, or (at your discretion)
 # any later version.
 # ------------------
+
+###########################################
+##---------------------------------------##
+## BEGIN - INITIAL VARIABLE DECLARATIONS ##
+##---------------------------------------##
+###########################################
+
+# Set timestamp
+TIMESTAMP="$(date +"%m-%d-%Y:%T")"
+
+#########################################
+##-------------------------------------##
+## END - INITIAL VARIABLE DECLARATIONS ##
+##-------------------------------------##
+#########################################
+
+##############################
+##--------------------------##
+## BEGIN - SCRIPT FUNCTIONS ##
+##--------------------------##
+##############################
+
+
+
+############################
+##------------------------##
+## END - SCRIPT FUNCTIONS ##
+##------------------------##
+############################
+
+#############################################
+##-----------------------------------------##
+## BEGIN - MAKE SURE WE'RE RUNNING AS ROOT ##
+##-----------------------------------------##
+#############################################
+
+if [ "$(id -u)" != "0" ]; then
+
+    echo -e "\n\n--------"
+    echo -e "WARNING!"
+    echo -e "--------\n\n"
+    echo -e "PHPSiteScan must be run as root\n\n"
+    echo -e "(Exiting now...)\n\n"
+    exit 1
+
+fi
+
+###########################################
+##---------------------------------------##
+## END - MAKE SURE WE'RE RUNNING AS ROOT ##
+##---------------------------------------##
+###########################################
+
+#########################
+##---------------------##
+## BEGIN - CORE SCRIPT ##
+##---------------------##
+#########################
+
+# ID any major panels running on system
+if [ -d /usr/local/cpanel ]; then
+
+    PANEL="WHM"
+
+elif [ -d /usr/local/psa ]; then
+
+    PANEL="Plesk"
+
+elif [ -d /usr/local/directadmin ]; then
+
+    PANEL="DirectAdmin"
+
+else
+
+    PANEL="Unknown"
+
+fi
+clear
+echo -e "\n\nPHPSiteScan v.01                                        $TIMESTAMP\n"
+echo -e "Copyright (c) 2015: Christopher 'InterGen' Cork  InterGenStudios"
+echo -e "Github: https://github.com/InterGenStudios/exBOMBER/blob/master/PHPSiteScan\n"
+echo -e "---------------------------------------------------------------------------\n"
+echo -e "Getting target paths...\n"
+sleep 2
+if [ -z "$1" ]; then
+
+    if [ "$PANEL" = "WHM" ] || [ "$PANEL" = "DirectAdmin" ]; then
+
+        TARGET_PATH="/home/*/public_html"
+
+    elif [ "$PANEL" = "Plesk" ]; then
+
+        TARGET_PATH="/var/www/vhosts"
+
+    else
+
+        TARGET_PATH="/var/www"
+
+    fi
+
+else
+
+    echo -e "Validating supplied path..."
+    sleep 2
+    tput cuu 1 && tput el
+    if [ -d "$1" ]; then
+
+        TARGET_PATH="$1"
+
+    else
+
+        echo -e "Invalid Path Supplied"
+        sleep 2
+        tput cuu 1 && tput el
+        echo -e "Loading default server path..."
+        sleep 2
+        tput cuu 1 && tput el
+        if [ "$PANEL" = "WHM" ] || [ "$PANEL" = "DirectAdmin" ]; then
+
+            TARGET_PATH="/home/*/public_html"
+
+        elif [ "$PANEL" = "Plesk" ]; then
+
+            TARGET_PATH="/var/www/vhosts"
+
+        else
+
+            TARGET_PATH="/var/www"
+
+        fi
+
+    fi
+
+fi
+sleep 1
+tput cuu 2 && tput el
+echo -e "Server Panel: $PANEL\n"
+echo -e "Target Path set to: $TARGET_PATH\n"
+echo -e "---------------------------------------------------------------------------\n\n\n\n\n\n"
+echo -e "  Searching for:\n"
+echo -e "  ====>  'eval(base64_decode'  <====\n"
+echo -e "_______________________________\n\n"
+mkdir -p /root/support/exBOMBER/tmp
+touch /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+for FILE in $(find $TARGET_PATH -type f -name '*.php'); do
+
+    grep -n "eval *(base64_decode *(" $FILE /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+
+done
+if [ "$(wc -l /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits | awk '{print $1}')" = "0" ]; then
+
+    echo No Hits Found
+
+else
+
+    sed -i -e '0,/:/! s/:/   Line:/' -e '0,/:/! s/:/  Hit: /2' /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+    cat /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+
+fi
+rm /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+echo -e "\n_______________________________\n\n\n\n\n\n"
+sleep 2
+echo -e "  Searching for:\n"
+echo -e "  ====>  'eval(str_rot13(base64_decode'  <====\n"
+echo -e "_______________________________\n\n"
+touch /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+for FILE in $(find $TARGET_PATH -type f -name '*.php'); do
+
+    grep -n "eval *(str_rot13 *(base64_decode *(" $FILE /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+
+done
+if [ "$(wc -l /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits | awk '{print $1}')" = "0" ]; then
+
+    echo No Hits Found
+
+else
+
+    sed -i -e '0,/:/! s/:/   Line:/' -e '0,/:/! s/:/  Hit: /2' /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+    cat /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+
+fi
+rm /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+echo -e "\n_______________________________\n\n\n\n\n\n"
+
+
+#######################
+##-------------------##
+## END - CORE SCRIPT ##
+##-------------------##
+#######################
+
+exit 0

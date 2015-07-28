@@ -656,7 +656,9 @@ DETACH () {
 # findbot.pl scan with -c option
 F_TURBO_SEARCH () {
 
+    # The actual Search command
     /root/support/exBOMBER/./findbot.pl -c $SEARCH_PATHS >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" &&
+    # Put something into a 'no results' log file
     if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
 
         {
@@ -668,10 +670,13 @@ F_TURBO_SEARCH () {
         } >> /var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP"
 
     fi
+    # Create a pastebin of the results
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
-    > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
+    > /root/support/exBOMBER/tmp/findbot_pastefile
+    # Set the pastebin URL to it's 'raw' view
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
+    # Set the email subject based on any user entered Support Ticket ID info
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
@@ -681,6 +686,7 @@ F_TURBO_SEARCH () {
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
+    # Email template
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -701,7 +707,9 @@ F_TURBO_SEARCH () {
 # standard findbot.pl scan
 F_SEARCH () {
 
+    # The actual Search command
     /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
+    # Put something into a 'no results' log file
     if [ "$(wc -l /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
 
         {
@@ -713,10 +721,13 @@ F_SEARCH () {
         } > /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP"
 
     fi
+    # Create a pastebin of the results
     curl -s -d private=1 -d title=FINDBOT_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
-    > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
+    > /root/support/exBOMBER/tmp/findbot_pastefile
+    # Set the pastebin URL to it's 'raw' view
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
+    # Set the email subject based on any user entered Support Ticket ID info
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
@@ -726,6 +737,7 @@ F_SEARCH () {
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
+    # Email template
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -746,12 +758,17 @@ F_SEARCH () {
 # maldet scan
 M_SEARCH () {
 
+    # The actual Search command
     maldet -a $SEARCH_PATHS >> /var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" &&
+    # Correct the formatting of the maldet log file
     sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|\[1G|\\e\n|g' -e 's|\\e||g' /var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" &&
+    # Create a pastebin of the results
     curl -s -d private=1 -d title=MALDET_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
-    > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
+    > /root/support/exBOMBER/tmp/maldet_pastefile
+    # Set the pastebin URL to it's 'raw' view
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
+    # Set the email subject based on any user entered Support Ticket ID info
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"
@@ -761,6 +778,7 @@ M_SEARCH () {
         SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
+    # Email template
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -833,7 +851,9 @@ else
 fi
 # Create log file location
 mkdir -p /var/log/exb_logs/exBOMBER
+# Run Initial Menu function
 GET_INSTRUCTIONS 2>&1 | tee /var/log/exb_logs/exBOMBER/exBOMBER_"$TIMESTAMP"
+# Check for user generated quit request
 if [ -f "/root/support/exBOMBER/tmp/QUIT" ]; then
 
     rm /root/support/exBOMBER/tmp/QUIT
@@ -867,12 +887,12 @@ else
             echo -e "    ${GREEN}TURBO OPTION ENABLED${NOCOLOR}\n"
             clear
             HEADER
+            # Post scan information to terminal prior to detaching scan subshell
             echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
             echo -e "    Upon completion, scan pastefile will be moved to:\n"
             echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
             echo -e "    (Provides fallback results presentation if email fails to send)\n"
             echo -e "    FINDBOT.PL scan progress can be observed with:\n"
-            # Provide logfile for scan observation if needed
             echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
             DETACH F_TURBO_SEARCH
@@ -884,12 +904,12 @@ else
             echo -e "    ${BLUE}TURBO OPTION DISABLED${NOCOLOR}\n"
             clear
             HEADER
+            # Post scan information to terminal prior to detaching scan subshell
             echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
             echo -e "    Upon completion, scan pastefile will be moved to:\n"
             echo -e "                ${WHITE}/var/log/exb_logs/findbot/findbot_pastefile_${GREEN}timestamp${NOCOLOR}\n"
             echo -e "    (Provides fallback results presentation if email fails to send)\n"
             echo -e "    FINDBOT.PL scan progress can be observed with:\n"
-            # Provide logfile for scan observation if needed
             echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
             DETACH F_SEARCH
@@ -905,12 +925,12 @@ else
         sleep 2
         clear
         HEADER
+        # Post scan information to terminal prior to detaching scan subshell
         echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
         echo -e "    Upon completion, scan pastefile will be moved to:\n"
         echo -e "                ${WHITE}/var/log/exb_logs/maldet/maldet_pastefile_${GREEN}timestamp${NOCOLOR}\n"
         echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
         echo -e "    MALDET scan progress can be observed with:\n"
-        # Provide logfile for scan observation if needed
         echo -e "                ${WHITE}tail -f /var/log/exb_logs/maldet/standard_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
         # Start scan in 'detached' subshell
         DETACH M_SEARCH
