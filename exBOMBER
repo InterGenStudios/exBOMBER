@@ -622,7 +622,6 @@ GET_NOTIFY_DESTINATION () {
                echo -e -n "    Enter ${WHITE}SUPPORT TICKET NUMBER${NOCOLOR}: "
                read SUPPORT_TICKET_ID
                echo SUPPORT_TICKET_ID = "$SUPPORT_TICKET_ID" >> /root/support/exBOMBER/tmp/scan_config
-               cp /root/support/exBOMBER/tmp/scan_config /root/support
                tput cuu 1 && tput el
                echo -e "    Support Ticket ${WHITE}#$SUPPORT_TICKET_ID${NOCOLOR} will be added to the notification email ${WHITE}SUBJECT${NOCOLOR}\n\n"
                sleep 2
@@ -673,14 +672,14 @@ F_TURBO_SEARCH () {
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
-    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-    if [ -z "$SUPPORT_TICKET_ID" ]; then
+    SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
 
     else
 
-        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
     {
