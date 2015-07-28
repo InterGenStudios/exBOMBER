@@ -718,13 +718,13 @@ F_SEARCH () {
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
     SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-    if [ -n "(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')" ]; then
+    if [ -z "$SUPPORT_ID" ]; then
 
-        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
 
     else
 
-        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
     {
@@ -753,13 +753,13 @@ M_SEARCH () {
     > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
     SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
-    if [ -n "(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')" ]; then
+    if [ -z "$SUPPORT_ID" ]; then
 
-        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
 
     else
 
-        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
     {
