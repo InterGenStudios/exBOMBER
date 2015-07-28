@@ -753,11 +753,11 @@ M_SEARCH () {
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
     if [ -z "$SUPPORT_ID" ]; then
 
-        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
+        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"
 
     else
 
-        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
+        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
 
     fi
     {
