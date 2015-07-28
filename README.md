@@ -7,7 +7,7 @@
     - php site scan - In development
 - Provides scan logfile for 'tail -f' - Working
 - Provides pastebin of results - Working
-- Emails results - In development
+- Emails results - Working
 
 ---
 
