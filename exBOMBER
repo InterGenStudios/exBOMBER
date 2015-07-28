@@ -672,7 +672,6 @@ F_TURBO_SEARCH () {
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
-    SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     if [ -z "$SUPPORT_ID" ]; then
 
         SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
@@ -876,6 +875,7 @@ else
             # Provide logfile for scan observation if needed
             echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
+            SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
             DETACH F_TURBO_SEARCH
             exit 0
 
