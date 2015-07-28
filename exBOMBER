@@ -613,6 +613,7 @@ GET_NOTIFY_DESTINATION () {
                ;;
 
     esac
+    # Get Support Ticket Information if needed
     echo -e -n "    Is this scan needed for a ${WHITE}Support Request${NOCOLOR} (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}?${NOCOLOR} "
     read SUPPORT_CHOICE
     case $SUPPORT_CHOICE in
@@ -620,7 +621,7 @@ GET_NOTIFY_DESTINATION () {
         [y,Y]) tput cuu 1 && tput el
                echo -e -n "    Enter ${WHITE}SUPPORT TICKET NUMBER${NOCOLOR}: "
                read SUPPORT_TICKET_ID
-               echo SUPPORT_TICKET_ID = $SUPPORT_TICKET_ID >> /root/support/exBOMBER/tmp/scan_config
+               echo SUPPORT_TICKET_ID = "$SUPPORT_TICKET_ID" >> /root/support/exBOMBER/tmp/scan_config
                tput cuu1 && tput el
                echo -e "    Support Ticket ${WHITE}#$SUPPORT_TICKET_ID${NOCOLOR} will be added to the notification email ${WHITE}SUBJECT${NOCOLOR}\n\n"
                sleep 2
