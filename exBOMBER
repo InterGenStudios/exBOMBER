@@ -853,6 +853,7 @@ else
     SEARCH_PATHS="$(grep SEARCH_PATHS /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     TURBO_OPTION="$(grep TURBO_OPTION /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     EMAIL_ADDR="$(grep EMAIL_ADDR /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     if [ "$SCAN_TYPE" = "FB" ]; then
 
         rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
@@ -875,7 +876,6 @@ else
             # Provide logfile for scan observation if needed
             echo -e "                ${WHITE}tail -f /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
             # Start scan in 'detached' subshell
-            SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
             DETACH F_TURBO_SEARCH
             exit 0
 
