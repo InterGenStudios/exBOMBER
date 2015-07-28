@@ -21,9 +21,6 @@
 
 # To Do List
 #-----------
-# NEED TO ASK FOR SUPPORT TICKET INFO TO APPEND TO EMAIL SUBJECT IN GET_NOTIFY_DESTINATION ()- WILL BE HELPFULL FOR HELPDESKS
-# NEED TO ID MAILSERVER TO ALLOW FOR ISSUING CORRECT MAIL COMMAND
-# - CURRENTLY ASSUMING SENDMAIL
 # NEED TO DEVELOP PHP_SITE_SCAN RE: http://www.gregfreeman.org/2013/how-to-tell-if-your-php-site-has-been-compromised/
 
 ###########################################
@@ -582,9 +579,6 @@ GET_NOTIFY_DESTINATION () {
 
     clear
     HEADER
-    # NEED TO ASK FOR SUPPORT TICKET INFO TO APPEND TO EMAIL SUBJECT IN GET_NOTIFY_DESTINATION ()- WILL BE HELPFULL FOR HELPDESKS
-    # NEED TO ID MAILSERVER TO ALLOW FOR ISSUING CORRECT MAIL COMMAND
-    # - CURRENTLY ASSUMING SENDMAIL
     # NEED TO IMPLEMENT BASIC PROPERLY FORMATTED EMAIL ADDRESS REGEX
     if [ "$SCAN_TYPE" = "FB" ]; then # Adjust header display based on scan-type
 
@@ -616,6 +610,22 @@ GET_NOTIFY_DESTINATION () {
                echo -e "\n    ${RED}RE-ENTER NOTIFICATION EMAIL${NOCOLOR}\n\n"
                sleep 2
                GET_NOTIFY_DESTINATION # Loop if user notices they entered an incorrect email
+               ;;
+
+    esac
+    echo -e -n "    Is this scan needed for a ${WHITE}Support Request${NOCOLOR} (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}?${NOCOLOR} "
+    read SUPPORT_CHOICE
+    case $SUPPORT_CHOICE in
+
+        [y,Y]) tput cuu 1 && tput el
+               echo -e -n "    Enter ${WHITE}SUPPORT TICKET NUMBER${NOCOLOR}: "
+               read SUPPORT_TICKET_ID
+               echo SUPPORT_TICKET_ID = $SUPPORT_TICKET_ID >> /root/support/exBOMBER/tmp/scan_config
+               tput cuu1 && tput el
+               echo -e "    Support Ticket ${WHITE}#$SUPPORT_TICKET_ID${NOCOLOR} will be added to the notification email ${WHITE}SUBJECT${NOCOLOR}\n\n"
+               ;;
+            *) tput cuu 1 && tput el
+               echo -e "    Support Request association ${WHITE}skipped${NOCOLOR}\n\n"
                ;;
 
     esac
@@ -659,6 +669,16 @@ F_TURBO_SEARCH () {
     text@/var/log/exb_logs/findbot/turbo_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
+    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    if [ -n "$SUPPORT_TICKET_ID" ]; then
+
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+
+    else
+
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
+
+    fi
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -680,7 +700,7 @@ F_TURBO_SEARCH () {
 F_SEARCH () {
 
     /root/support/exBOMBER/./findbot.pl $SEARCH_PATHS >> /var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" &&
-    if [ "$(wc -l /var/log/exb_logs/findbot/turbo_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
+    if [ "$(wc -l /var/log/exb_logs/findbot/standard_scan_$TIMESTAMP | awk '{print $1}')" = "0" ]; then
 
         {
         echo -e "\n    =========================================="
@@ -695,6 +715,16 @@ F_SEARCH () {
     text@/var/log/exb_logs/findbot/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/findbot_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findbot_pastefile
+    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    if [ -n "$SUPPORT_TICKET_ID" ]; then
+
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+
+    else
+
+        SUBJECT=FINDBOT\ SCAN\ "$TIMESTAMP"
+
+    fi
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
@@ -720,6 +750,16 @@ M_SEARCH () {
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
     sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/maldet_pastefile
+    SUPPORT_TICKET_ID="$(grep SUPPORT_TICKET_ID /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    if [ -n "$SUPPORT_TICKET_ID" ]; then
+
+        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_TICKET_ID"
+
+    else
+
+        SUBJECT=MALDET\ SCAN\ "$TIMESTAMP"
+
+    fi
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
