@@ -547,7 +547,7 @@ EXEC_MALDET () {
 
                tput cuu 2 && tput el
                echo SEARCH_PATHS = "$CUSTOM_PATH" >> /root/support/exBOMBER/tmp/scan_config
-               echo -e "\n    MALDET will search ${WHITE}$CUSTOM_PATH${NOCOLOR}\n\n\n\n"
+               echo -e "\n    MALDET will now scan the ${WHITE}$CUSTOM_PATH${NOCOLOR} directory.\n\n\n\n"
                sleep 2
                GET_NOTIFY_DESTINATION
 
@@ -747,6 +747,7 @@ F_SEARCH () {
 M_SEARCH () {
 
     maldet -a $SEARCH_PATHS >> /var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" &&
+    sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|\[1G|\\e\n|g' -e 's|\\e||g' /var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" &&
     curl -s -d private=1 -d title=MALDET_SCAN -d name=exBOMBER --data-urlencode \
     text@/var/log/exb_logs/maldet/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
     > /root/support/exBOMBER/tmp/maldet_pastefile # Creates pastebin of any results
