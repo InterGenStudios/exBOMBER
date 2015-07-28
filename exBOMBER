@@ -623,9 +623,11 @@ GET_NOTIFY_DESTINATION () {
                echo SUPPORT_TICKET_ID = $SUPPORT_TICKET_ID >> /root/support/exBOMBER/tmp/scan_config
                tput cuu1 && tput el
                echo -e "    Support Ticket ${WHITE}#$SUPPORT_TICKET_ID${NOCOLOR} will be added to the notification email ${WHITE}SUBJECT${NOCOLOR}\n\n"
+               sleep 2
                ;;
             *) tput cuu 1 && tput el
                echo -e "    Support Request association ${WHITE}skipped${NOCOLOR}\n\n"
+               sleep 2
                ;;
 
     esac
