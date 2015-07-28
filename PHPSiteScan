@@ -161,18 +161,14 @@ echo -e "  ====>  'eval(base64_decode'  <====\n"
 echo -e "_______________________________\n\n"
 mkdir -p /root/support/exBOMBER/tmp
 touch /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
-for FILE in $(find $TARGET_PATH -type f -name '*.php'); do
-
-    grep -n "eval *(base64_decode *(" $FILE /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
-
-done
+find $TARGET_PATH -type f -name '*.php' | xargs grep "eval *(base64_decode *(" /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
 if [ "$(wc -l /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits | awk '{print $1}')" = "0" ]; then
 
     echo No Hits Found
 
 else
 
-    sed -i -e '0,/:/! s/:/   Line:/' -e '0,/:/! s/:/  Hit: /2' /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
+    sed -i 's/:/     HIT:  /g' /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
     cat /root/support/exBOMBER/tmp/PHPSiteScan_1stSearchHits
 
 fi
@@ -183,18 +179,14 @@ echo -e "  Searching for:\n"
 echo -e "  ====>  'eval(str_rot13(base64_decode'  <====\n"
 echo -e "_______________________________\n\n"
 touch /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
-for FILE in $(find $TARGET_PATH -type f -name '*.php'); do
-
-    grep -n "eval *(str_rot13 *(base64_decode *(" $FILE /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
-
-done
+find $TARGET_PATH -type f -name '*.php' | xargs grep "eval *(str_rot13 *(base64_decode *(" /dev/null >> /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
 if [ "$(wc -l /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits | awk '{print $1}')" = "0" ]; then
 
     echo No Hits Found
 
 else
 
-    sed -i -e '0,/:/! s/:/   Line:/' -e '0,/:/! s/:/  Hit: /2' /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
+    sed -i 's/:/     HIT:  /g' /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
     cat /root/support/exBOMBER/tmp/PHPSiteScan_2ndSearchHits
 
 fi
