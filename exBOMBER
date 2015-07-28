@@ -622,7 +622,7 @@ GET_NOTIFY_DESTINATION () {
                echo -e -n "    Enter ${WHITE}SUPPORT TICKET NUMBER${NOCOLOR}: "
                read SUPPORT_TICKET_ID
                echo SUPPORT_TICKET_ID = "$SUPPORT_TICKET_ID" >> /root/support/exBOMBER/tmp/scan_config
-               tput cuu1 && tput el
+               tput cuu 1 && tput el
                echo -e "    Support Ticket ${WHITE}#$SUPPORT_TICKET_ID${NOCOLOR} will be added to the notification email ${WHITE}SUBJECT${NOCOLOR}\n\n"
                sleep 2
                ;;
