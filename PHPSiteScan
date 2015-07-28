@@ -1,0 +1,19 @@
+#!/bin/bash
+# PHPSiteScan
+# -------------------------------------------------------
+# PHPSiteScan: A PHP website hack/exploit-finder utility
+# version: .01
+# Github: https://github.com/InterGenStudios/exBOMBER/blob/master/PHPSiteScan
+# ---------------------------------------------------
+# InterGenStudios: 7-28-15
+# Copyright (c) 2015: Christopher 'InterGen' Cork  InterGenStudios
+# --------------------------------
+# License: GPL-2.0+
+# URL: http://opensource.org/licenses/gpl-license.php
+# ---------------------------------------------------
+# PHPSiteScan is free software:
+# You may redistribute it and/or modify it under the terms of the
+# GNU General Public License as published by the Free Software
+# Foundation, either version 2 of the License, or (at your discretion)
+# any later version.
+# ------------------

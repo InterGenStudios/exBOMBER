@@ -1,9 +1,9 @@
 #!/bin/bash
 # exBOMBER
 # -------------------------------------------------------
-# exBOMBER: A linux server hack/exploit finder
+# exBOMBER: A linux server hack/exploit-finder suite
 # version: .01
-# Github: https://github.com/InterGenStudios
+# Github: https://github.com/InterGenStudios/exBOMBER
 # ---------------------------------------------------
 # InterGenStudios: 7-25-15
 # Copyright (c) 2015: Christopher 'InterGen' Cork  InterGenStudios
