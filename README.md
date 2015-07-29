@@ -1,4 +1,4 @@
-# exBOMBER
+![alt text](https://raw.githubusercontent.com/InterGenStudios/exBOMBER/master/exBOMBER_FINAL_500x165.png "exBOMBER")
 
 ## Launches choice hack/exploit scanner in a detached subshell, and emails a pastebin of the results
 
