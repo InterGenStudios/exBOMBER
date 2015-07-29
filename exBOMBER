@@ -1056,23 +1056,35 @@ M_SEARCH () {
 # findcrack0r.pl scan
 FC_SEARCH () {
 
+    touch /root/support/exBOMBER/tmp/fc_running
     # Check for custom flags
     if [ -z "$FC_CUSTOM_FLAGS" ]; then
 
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS >> \
-        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
+        sed -i 's//root\/support\/scan-/var\/log\/exb_logs\/findcrack0r\/scan-/' \
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
+        rm /root/support/exBOMBER/tmp/fc_running
 
     else
 
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl "$FC_CUSTOM_FLAGS" -o $SEARCH_PATHS >> \
-        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
+        sed -i 's//root\/support\/scan-/var\/log\/exb_logs\/findcrack0r\/scan-/' \
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
+        rm /root/support/exBOMBER/tmp/fc_running
 
     fi
-    sleep 5
+    # Wait until the search completes to continue
+    while [ -f /root/support/exBOMBER/tmp/rc_running ]; do
+
+        sleep 10
+
+    done
     # Put something into a 'no results' log file
-    if [ "$(wc -l /var/log/exb_logs/findcrack0r/standard_scan_$TIMESTAMP | awk '{print $1}')" = "2" ]; then
+    if [ "$(wc -l /var/log/exb_logs/findcrack0r/standard_scan_$TIMESTAMP | awk '{print $1}')" -lt 5 ]; then
 
         >/var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
         {
@@ -1104,7 +1116,7 @@ FC_SEARCH () {
     {
     echo -e "TO: $EMAIL_ADDR\n"
     echo -e "FROM: exBOMBER\n"
-    echo -e "SUBJECT: FINDCRACK0R.PL\ SCAN\ $TIMESTAMP\n\n"
+    echo -e "SUBJECT: FINDCRACK0R.PL SCAN $TIMESTAMP\n\n"
     echo -e "Results are at: $(cat /root/support/exBOMBER/tmp/findcrack0r_pastefile)\n"
     } >> /root/support/exBOMBER/tmp/fc_scan_email # Basic email template file
     # Email the results
@@ -1113,12 +1125,12 @@ FC_SEARCH () {
     rm /root/support/exBOMBER/tmp/fc_scan_email
     if [ $(find /root/support/exBOMBER -type f -name 'scan-*.txt' | wc -l) -gt 0 ]; then
 
-        find /root/support/exBOMBER -type f -name 'scan-*.txt' | xargs rm
+        mv /root/support/exBOMBER/scan-*txt /var/log/exb_logs/findcrack0r/
 
     fi
     if [ $(find /root/support/exBOMBER -type f -name 'symlinks-*.txt' | wc -l) -gt 0 ]; then
 
-        find /root/support/exBOMBER -type f -name 'symlinks-*.txt' | xargs rm
+        mv /root/support/exBOMBER/symlinks-*.txt /var/log/exb_logs/findcrack0r/
 
     fi
     # Move pastefile into log directory
