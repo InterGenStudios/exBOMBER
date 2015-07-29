@@ -1063,7 +1063,7 @@ FC_SEARCH () {
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS >> \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
-        sed -i 's//root\/support\/scan-/var\/log\/exb_logs\/findcrack0r\/scan-/' \
+        sed -i 's|/root/support/scan-|/var/log/exb_logs/findcrack0r/scan-|' \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
         rm /root/support/exBOMBER/tmp/fc_running
 
@@ -1072,7 +1072,7 @@ FC_SEARCH () {
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS "$FC_CUSTOM_FLAGS" >> \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
-        sed -i 's//root\/support\/scan-/var\/log\/exb_logs\/findcrack0r\/scan-/' \
+        sed -i 's|/root/support/scan-|/var/log/exb_logs/findcrack0r/scan-|' \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
         rm /root/support/exBOMBER/tmp/fc_running
 
@@ -1176,6 +1176,8 @@ fi
 ##---------------------##
 #########################
 
+# Move to the exBOMBER directory
+cd /root/support/exBOMBER
 # ID any major panels running on system
 if [ -d /usr/local/cpanel ]; then
 
