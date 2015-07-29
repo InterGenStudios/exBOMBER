@@ -1,6 +1,7 @@
 # exBOMBER
 
-## Launches choice hack/exploit scanner in detached subshell
+## Launches choice hack/exploit scanner
+## in detached subshell
 
 
 #### Currently available scanners
