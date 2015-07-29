@@ -1125,12 +1125,12 @@ FC_SEARCH () {
     rm /root/support/exBOMBER/tmp/fc_scan_email
     if [ $(find /root/support -type f -name 'scan-*.txt' | wc -l) -gt 0 ]; then
 
-        mv /root/support/exBOMBER/scan-*txt /var/log/exb_logs/findcrack0r/
+        mv /root/support/scan-*txt /var/log/exb_logs/findcrack0r/
 
     fi
     if [ $(find /root/support -type f -name 'symlinks-*.txt' | wc -l) -gt 0 ]; then
 
-        mv /root/support/exBOMBER/symlinks-*.txt /var/log/exb_logs/findcrack0r/
+        mv /root/support/symlinks-*.txt /var/log/exb_logs/findcrack0r/
 
     fi
     # Move pastefile into log directory
