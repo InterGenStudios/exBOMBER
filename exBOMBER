@@ -87,7 +87,8 @@ GET_INSTRUCTIONS () {
     echo -e "    ${GREEN}${UNDERLINE_TEXT}Select Scanner${NOCOLOR}:\n\n\n"
     echo -e "    ${WHITE}1) ${GREEN}Findbot.pl      ${NOCOLOR}(${WHITE}1-i${NOCOLOR} for info)\n"
     echo -e "    ${WHITE}2) ${GREEN}Maldet          ${NOCOLOR}(${WHITE}2-i${NOCOLOR} for info)\n"
-    echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n\n"
+    echo -e "    ${WHITE}3) ${GREEN}PHP Site Scan   ${NOCOLOR}(${WHITE}3-i${NOCOLOR} for info)\n"
+    echo -e "    ${WHITE}4) ${GREEN}Findcrack0r.pl  ${NOCOLOR}(${WHITE}4-i${NOCOLOR} for info)\n\n"
     echo -e -n "    [${WHITE}${UNDERLINE_TEXT}Enter Sanner Selection${NOCOLOR}(q for quit)]: "
     read -r get_instructions
     case $get_instructions in
@@ -135,11 +136,29 @@ GET_INSTRUCTIONS () {
            -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
            -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' -e 's|\[2A\[K||g' /var/log/exb_logs/php_scan/site_scan_"$TIMESTAMP"
            ;;
+        4) mkdir -p /root/support/exBOMBER/tmp # Create tmp directory for files created during execution
+           echo SCAN_TYPE = FC > /root/support/exBOMBER/tmp/scan_config # scan_config will be used to transfer subshell-created variables into the parent shell
+           SCAN_TYPE=FC
+           # Create logging directory
+           mkdir -p /var/log/exb_logs/findcrack0r
+           CHECK_FOR_FINDCRACK0R 2>&1 | tee /var/log/exb_logs/findcrack0r/chk_fcr_"$TIMESTAMP"
+           # sed command to remove messy terminal color variables from logs
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' -e 's|\[2A\[K||g' /var/log/exb_logs/findcrack0r/chk_fcr_"$TIMESTAMP"
+           EXEC_FINDCRACK0R 2>&1 | tee /var/log/exb_logs/findcrack0r/exec_fcr_"$TIMESTAMP"
+           # sed command to remove messy terminal color variables from logs
+           sed -i -e 's/[\x01-\x1F\x7F]//g' -e 's|(B\[m||g' -e 's|\[H\[2J||g' -e 's|\[1m\[31m||g' -e 's|\[1m\[32m||g' \
+           -e 's|\[1m\[33m||g' -e 's|\[1m\[34m||g' -e 's|\[1m\[35m||g' -e 's|\[1m\[36m||g' -e 's|\[1m\[37m||g' \
+           -e 's|\[4m||g' -e 's|\[5m||g' -e 's|\[5A\[K||g' -e 's|\[0m||g' -e 's|\[1A\[K||g' -e 's|\[2A\[K||g' /var/log/exb_logs/findcrack0r/exec_fcr_"$TIMESTAMP"
+           ;;
       1-i) FINDBOT_HELPTEXT
            ;;
       2-i) MALDET_HELPTEXT
            ;;
       3-i) PHP_SITE_SCAN_HELPTEXT
+           ;;
+      4-i) FINDCRACK0R_HELPTEXT
            ;;
     [q,Q]) clear
            HEADER
@@ -182,7 +201,7 @@ FINDBOT_HELPTEXT () {
     echo -e "            ${WHITE}\"suspicious files\"${NOCOLOR} are files that contain things that -may- be"
     echo -e "            malicious.\n"
     echo -e "            ${WHITE}\"malware\"${NOCOLOR} is definitely malicious software.\n"
-    echo -e "        FINDBOT.PL scan logs will be written to:\n"
+    echo -e "        ${WHITE}ex${CYAN}BOMBER ${NOCOLOR}FINDBOT.PL scan logs will be written to:\n"
     echo -e "            ${WHITE}/var/log/exb_logs/findbot/${NOCOLOR}<log>\n"
     echo -e "        A pastebin of the log will also be provided.\n\n\n"
     echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
@@ -284,9 +303,54 @@ PHP_SITE_SCAN_HELPTEXT () {
 
 }
 
+FINDCRACK0R_HELPTEXT () {
+
+    clear
+    HEADER
+    echo -e "    ${WHITE}FINDCRACK0R HELPTEXT${NOCOLOR}"
+    DIVIDER
+    echo -e "    Findcrack0r.pl is a regex-based PHP malware scanner developed by"
+    echo -e "    coydogsoftware.net\n"
+    echo -e "    ${GREEN}===> ${WHITE}https://repo.coydogsoftware.net/coydog/rxtools/tree/master${NOCOLOR}\n"
+    echo -e "    It requires ${WHITE}File::Path${NOCOLOR}, which should be a Perl core module. ${WHITE}ex${CYAN}BOMBER${NOCOLOR}'s"
+    echo -e "    implementation sets the script to use cPanel's Perl environment for WHM"
+    echo -e "    servers automatically. An option to set user defined flags when launching"
+    echo -e "    the scan is also available.\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}ex${CYAN}BOMBER ${WHITE}FINDCRACK0R Options${NOCOLOR}:\n"
+    echo -e "        ${WHITE}ES${NOCOLOR} - Scans the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver"
+    echo -e "        ${WHITE}WD${NOCOLOR} - Scans the ${WHITE}W${NOCOLOR}eb ${WHITE}D${NOCOLOR}oc-roots:"
+    echo -e "                     ${WHITE}/home/*/public_html${NOCOLOR} or ${WHITE}/var/www${NOCOLOR}"
+    echo -e "        ${WHITE}CF${NOCOLOR} - Scan set with user defined ${WHITE}C${NOCOLOR}ustom ${WHITE}F${NOCOLOR}lags"
+    echo -e "        ${WHITE}CP${NOCOLOR} - Scans the user provided ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath\n"
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Results${NOCOLOR}:\n"
+    echo -e "        ${WHITE}ex${CYAN}BOMBER${NOCOLOR} FINDCRACK0R scan logs will be written to:\n"
+    echo -e "            ${WHITE}/var/log/exb_logs/findcrack0r/${NOCOLOR}<log>\n"
+    echo -e "        A pastebin of the log will also be provided.\n\n\n"
+    echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
+    read -r MHT_CHOICE
+    case "$MHT_CHOICE" in
+
+        [m,M]) GET_INSTRUCTIONS
+               ;;
+        [q,Q]) clear
+               HEADER
+               mkdir -p /root/support/exBOMBER/tmp
+               touch  /root/support/exBOMBER/tmp/QUIT
+               echo -e "    Exiting...\n\n\n"
+               sleep 2
+               exit 0
+               ;;
+            *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}" # Loop invalid entries
+               sleep 2
+               FINDCRACK0R_HELPTEXT
+               ;;
+    esac
+}
+
 CHECK_FOR_FINDBOT () {
 
-    if [ -f "/root/support/exBOMBER/findbot.pl" ]; then # Checks for findbot.pl in our location
+    # Checks for findbot.pl in our location
+    if [ -f "/root/support/exBOMBER/findbot.pl" ]; then
 
         clear
         HEADER
@@ -300,7 +364,8 @@ CHECK_FOR_FINDBOT () {
         echo -e "    ${GREEN}FINDBOT.PL ${NOCOLOR}is ${WHITE}not${NOCOLOR} present on server\n\n"
         sleep .5
         echo -e "    Fetching FINDBOT.PL...\n"
-        mkdir -p /root/support/exBOMBER # Creates exBOMBER directory if not present
+        # Create exBOMBER directory if not present
+        mkdir -p /root/support/exBOMBER
         # fetch findbot.pl and set it executable
         wget -q http://cbl.abuseat.org/findbot.pl -P /root/support/exBOMBER && chmod +x /root/support/exBOMBER/findbot.pl
         sleep .5
@@ -313,12 +378,14 @@ CHECK_FOR_FINDBOT () {
 
 CHECK_FOR_MALDET () {
 
-    if [ -f "/usr/local/maldetect/maldet" ]; then # Checks for maldet on server
+    # Checks for maldet on server
+    if [ -f "/usr/local/maldetect/maldet" ]; then
 
         clear
         HEADER
         echo -e "    ${GREEN}MALDET ${WHITE}is ${NOCOLOR}present on server\n\n"
         sleep .5
+        # Update maldet if found
         echo -e "    Updating malware signatures, stand by...\n"
         maldet -u > /dev/null 2>&1 && maldet -d > /dev/null 2>&1
         echo -e "    MALDET has been updated"
@@ -345,13 +412,44 @@ CHECK_FOR_MALDET () {
 
 }
 
+CHECK_FOR_FINDCRACK0R () {
+
+    # Checks for findcrack0r.pl in our location
+    if [ -f "/root/support/exBOMBER/findcrack0r.pl" ]; then
+
+        clear
+        HEADER
+        echo -e "    ${GREEN}FINDCRACK0R.PL ${WHITE}is ${NOCOLOR}present on server\n\n"
+        sleep .5
+
+    else
+
+        clear
+        HEADER
+        echo -e "    ${GREEN}FINDCRACK0R.PL ${NOCOLOR}is ${WHITE}not${NOCOLOR} present on server\n\n"
+        sleep .5
+        echo -e "    Fetching FINDCRACK0R.PL...\n"
+        # Create exBOMBER directory if not present
+        mkdir -p /root/support/exBOMBER
+        # fetch findcrack0r.pl and set it executable
+        wget -q https://raw.githubusercontent.com/InterGenStudios/exBOMBER/master/findcrack0r.pl -P /root/support/exBOMBER \
+        && chmod +x /root/support/exBOMBER/findcrack0r.pl
+        sleep .5
+        echo -e "    Script retrieved successfully\n"
+        sleep .5
+
+    fi
+
+}
+
 EXEC_FINDBOT () {
 
+    # User configuration menu for findbot.pl scan
     clear
     HEADER
     echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDBOT.PL MENU${NOCOLOR}"
     DIVIDER
-    echo -e "    ${WHITE}${UNDERLINE_TEXT}Set the search path${NOCOLOR}\n\n" # Menu to get user-declared search paths
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Set the search path${NOCOLOR}\n\n"
     echo -e "        ${WHITE}1) ES - ${NOCOLOR}Scan the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver\n"
     echo -e "        ${WHITE}2) DD - ${NOCOLOR}Scan the ${WHITE}D${NOCOLOR}efault ${WHITE}D${NOCOLOR}irectories:\n"
     # Set default search directories based on presence of any server panels
@@ -474,13 +572,15 @@ EXEC_FINDBOT () {
 
                echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
                sleep 2
-               EXEC_FINDBOT # Loop invalid entries
+               # Loop for invalid entries
+               EXEC_FINDBOT
 
            fi
            ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}\n\n\n\n"
            sleep 2
-           EXEC_FINDBOT # Loop invalid entries
+           # Loop for invalid entries
+           EXEC_FINDBOT
            ;;
     esac
 
@@ -488,11 +588,12 @@ EXEC_FINDBOT () {
 
 EXEC_MALDET () {
 
+    # User configuration menu for maldet scan
     clear
     HEADER
     echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET MENU${NOCOLOR}"
     DIVIDER
-    echo -e "    ${WHITE}${UNDERLINE_TEXT}Set the search path${NOCOLOR}\n\n" # Menu to get user-declared search paths
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Set the search path${NOCOLOR}\n\n"
     echo -e "        ${WHITE}1) ES - ${NOCOLOR}Scan the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver\n"
     echo -e "        ${WHITE}2) UD - ${NOCOLOR}Scan the ${WHITE}U${NOCOLOR}ser ${WHITE}D${NOCOLOR}irectories:\n"
     if [ "$PANEL" = "WHM" ] || [ "$PANEL" = "DirectAdmin" ]; then
@@ -555,13 +656,15 @@ EXEC_MALDET () {
 
                echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
                sleep 2
-               EXEC_MALDET # Loop invalid entries
+               # Loop for invalid entries
+               EXEC_MALDET
 
            fi
            ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}\n\n\n\n"
            sleep 2
-           EXEC_MALDET # Loop invalid entries
+           # Loop for invalid entries
+           EXEC_MALDET
            ;;
     esac
 
@@ -572,6 +675,137 @@ EXEC_PHP_SITE_SCAN () {
     clear # NEED TO DEVELOP PHP_SITE_SCAN RE: http://www.gregfreeman.org/2013/how-to-tell-if-your-php-site-has-been-compromised/
     HEADER
     echo -e "    ${YELLOW}${UNDERLINE_TEXT}IN DEVELOPMENT - CHECK BACK SOON${NOCOLOR}\n\n\n\n"
+
+}
+
+EXEC_FINDCRACK0R () {
+
+    # User configuration menu for findcrack0r.pl scan
+    clear
+    HEADER
+    echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDCRACK0R.PL MENU${NOCOLOR}"
+    DIVIDER
+    echo -e "    ${WHITE}${UNDERLINE_TEXT}Set the search options${NOCOLOR}\n\n"
+    echo -e "        ${WHITE}1) ES - ${NOCOLOR}Scan the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver\n"
+    echo -e "        ${WHITE}2) WD - ${NOCOLOR}Scan the ${WHITE}W${NOCOLOR}eb ${WHITE}D${NOCOLOR}oc-roots:\n"
+    # Set default search directories based on presence of any server panels
+    if [ "$PANEL" = "WHM" ] || [ "$PANEL" = "DirectAdmin" ]; then
+
+        FC_PATH_TYPE=SINGLE_W_D
+        echo -e "                       ${WHITE}/home/*/public_html${NOCOLOR}\n"
+
+    elif [ "$PANEL" = "Plesk" ]; then
+
+        FC_PATH_TYPE=SINGLE_P
+        echo -e "                       ${WHITE}/var/www/vhosts${NOCOLOR}\n"
+
+    else
+
+        FC_PATH_TYPE=SINGLE_U
+        echo -e "                       ${WHITE}/var/www${NOCOLOR}\n"
+
+    fi
+    echo -e "        ${WHITE}3) CP - ${NOCOLOR}Scan a ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath\n\n"
+    echo -e "        ${WHITE}4) CF - ${NOCOLOR}Set ${WHITE}C${NOCOLOR}ustom ${WHITE}F${NOCOLOR}lags\n\n"
+    echo -e -n "    [${WHITE}Enter Selection ${NOCOLOR}1-4]: "
+    read -r F_C_SELECTION
+    case $F_C_SELECTION in
+
+        1) tput cuu 2 && tput el
+           echo SEARCH_PATHS = / >> /root/support/exBOMBER/tmp/scan_config
+           SEARCH_PATHS="/"
+           echo -e "\n    FINDCRACK0R will search the ${WHITE}E${NOCOLOR}ntire ${WHITE}S${NOCOLOR}erver\n"
+           echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
+           sleep 2
+           GET_NOTIFY_DESTINATION
+           ;;
+        2) tput cuu 2 && tput el
+           if [ "$FC_PATH_TYPE" = "SINGLE_W_D" ]; then
+
+               SEARCH_PATHS="/home/*/public_html"
+               echo SEARCH_PATHS = /home/*/public_html >> /root/support/exBOMBER/tmp/scan_config
+
+           elif [ "$FC_PATH_TYPE" = "SINGLE_P" ]; then
+
+               SEARCH_PATHS="/var/www/vhosts"
+               echo SEARCH_PATHS = /var/www/vhosts >> /root/support/exBOMBER/tmp/scan_config
+
+           else
+
+               SEARCH_PATHS="/var/www"
+               echo SEARCH_PATHS = /var/www >> /root/support/exBOMBER/tmp/scan_config
+
+           fi
+           echo -e "\n    MALDET will search ${WHITE}$SHOW_SEARCH_PATHS${NOCOLOR}\n"
+           echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
+           sleep 2
+           GET_NOTIFY_DESTINATION
+           ;;
+        3) tput cuu 2 && tput el
+           echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
+           echo -e -n "    [${WHITE}Enter Custom Path${NOCOLOR}]: "
+           read -r CUSTOM_PATH
+           # Check to make sure user declared custom path exists
+           if [ -d "$CUSTOM_PATH" ]; then
+
+               tput cuu 2 && tput el
+               echo SEARCH_PATHS = "$CUSTOM_PATH" >> /root/support/exBOMBER/tmp/scan_config
+               echo -e "\n    FINDCRACK0R will now scan the ${WHITE}$CUSTOM_PATH${NOCOLOR} directory.\n\n\n\n"
+               sleep 2
+               GET_NOTIFY_DESTINATION
+
+           else
+
+               echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
+               sleep 2
+               # Loop invalid entries
+               EXEC_FINDCRACK0R
+
+           fi
+           ;;
+        4) clear
+           HEADER
+           echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDCRACK0R.PL Custom Flag options${NOCOLOR}"
+           DIVIDER
+           echo -e "    ${WHITE}${UNDERLINE_TEXT}Available flags${NOCOLOR}:\n"
+           echo -e "    ${WHITE}-b${NOCOLOR}    Number of bytes per file to scan.  Default is 5000000"
+           echo -e "    ${WHITE}-p${NOCOLOR}    Restrict searches to *.php (faster, but may miss things)"
+           echo -e "    ${WHITE}-s${NOCOLOR}    Skip symlinks"
+           echo -e "    ${WHITE}-d${NOCOLOR}    Use grep to check for defacements\n"
+           echo -e "    ${WHITE}Example Entry:  ${NOCOLOR}-b 1000000 -s -d"
+
+           DIVIDER
+           echo -e -n "    [${WHITE}Enter Custom Flags ${NOCOLOR}]: "
+           read -r FC_CUSTOM_FLAGS
+           tput cuu 1 && tput el
+           echo -e "    The following Custom Flags will be used for the FINDCRACK0R scan:\n"
+           echo -e "                ${WHITE}$FC_CUSTOM_FLAGS${NOCOLOR}\n"
+           echo -e -n "    Are these correct (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}?${NOCOLOR} "
+           read -r FC_CUSTOM_FLAGS_CONFIRMATION
+           case $FC_CUSTOM_FLAGS_CONFIRMATION in
+
+               [y,Y]) tput cuu 1 && tput el
+                      echo FC_CUSTOM_FLAGS = "$FC_CUSTOM_FLAGS" >> /root/support/exBOMBER/tmp/scan_config
+                      echo -e "    ${WHITE}Custom Flags confirmed${NOCOLOR}"
+                      sleep 2
+                      ;;
+                   *) tput cuu 1 && tput el
+                      echo -e "    ${YELLOW}Custom Flags invalidated by user${NOCOLOR}"
+                      echo -e "    Restarting FINDCRACK0R configuration menu..."
+                      sleep 2
+                      # Loop for invalid entries
+                      EXEC_FINDCRACK0R
+                      ;;
+
+           esac
+           ;;
+        *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}\n\n\n\n"
+           sleep 2
+           # Loop for invalid entries
+           EXEC_FINDCRACK0R
+           ;;
+
+       esac
 
 }
 
@@ -588,9 +822,13 @@ GET_NOTIFY_DESTINATION () {
 
         echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}MALDET Scan${NOCOLOR}"
 
-    else
+    elif [ "$SCAN_TYPE" = "PS" ]; then
 
         echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
+
+    else
+
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDCRACK0R.PL Scan${NOCOLOR}"
 
     fi
     DIVIDER
@@ -796,6 +1034,81 @@ M_SEARCH () {
 
 }
 
+# findcrack0r.pl scan
+FC_SEARCH () {
+
+    # Check for custom flags
+    if [ -z "$FC_CUSTOM_FLAGS" ]; then
+
+        # The actual Search command
+        /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS >> \
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" &&
+
+    else
+
+        # The actual Search command
+        /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS $FC_CUSTOM_FLAGS >> \
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" &&
+
+    fi
+    # Put something into a 'no results' log file
+    if [ "$(wc -l /var/log/exb_logs/findcrack0r/standard_scan_$TIMESTAMP | awk '{print $1}')" = "2" ]; then
+
+        >/var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
+        {
+        echo -e "\n    =============================================="
+        echo -e "    FINDCRACK0R.PL scan ran on $TIMESTAMP"
+        echo -e "    ==============================================\n\n"
+        echo -e "    NO HITS! SYSTEM IS CLEAN!\n\n"
+        echo -e "    Regards,\n\n      -exBOMBER\n\n"
+        } >> /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
+
+    fi
+    # Create a pastebin of the results
+    curl -s -d private=1 -d title=FINDCRACK0R.PL_SCAN -d name=exBOMBER --data-urlencode \
+    text@/var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" http://nobits.ml/api/create \
+    > /root/support/exBOMBER/tmp/findcrack0r_pastefile
+    # Set the pastebin URL to it's 'raw' view
+    sed -i 's|view/|view/raw/|' /root/support/exBOMBER/tmp/findcrack0r_pastefile
+    # Set the email subject based on any user entered Support Ticket ID info
+    if [ -z "$SUPPORT_ID" ]; then
+
+        SUBJECT=FINDCRACK0R.PL\ SCAN\ "$TIMESTAMP"
+
+    else
+
+        SUBJECT=FINDCRACK0R.PL\ SCAN\ "$TIMESTAMP"\ For\ Support\ Ticket\ "$SUPPORT_ID"
+
+    fi
+    # Email template
+    {
+    echo -e "TO: $EMAIL_ADDR\n"
+    echo -e "FROM: exBOMBER\n"
+    echo -e "SUBJECT: FINDCRACK0R.PL\ SCAN\ $TIMESTAMP\n\n"
+    echo -e "Results are at: $(cat /root/support/exBOMBER/tmp/findcrack0r_pastefile)\n"
+    } >> /root/support/exBOMBER/tmp/fc_scan_email # Basic email template file
+    # Email the results
+    mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/fc_scan_email 2>&1 >/dev/null
+    # Remove temporary files created during execution
+    rm /root/support/exBOMBER/tmp/fc_scan_email
+    if [ $(find /root/support/exBOMBER -type f -name 'scan-*.txt' | wc -l) -gt 0 ]; then
+
+        find /root/support/exBOMBER -type f -name 'scan-*.txt' | xargs rm
+
+    fi
+    if [ $(find /root/support/exBOMBER -type f -name 'symlinks-*.txt' | wc -l) -gt 0 ]; then
+
+        find /root/support/exBOMBER -type f -name 'symlinks-*.txt' | xargs rm
+
+    fi
+    # Move pastefile into log directory
+    mv /root/support/exBOMBER/tmp/findcrack0r_pastefile \
+    /var/log/exb_logs/findcrack0r/findcrack0r_pastefile_"$TIMESTAMP"
+    # Exit cleanly in background
+    exit 0
+
+}
+
 ############################
 ##------------------------##
 ## END - SCRIPT FUNCTIONS ##
@@ -873,6 +1186,7 @@ else
     TURBO_OPTION="$(grep TURBO_OPTION /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     EMAIL_ADDR="$(grep EMAIL_ADDR /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     SUPPORT_ID="$(grep SUPPORT /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
+    FC_CUSTOM_FLAGS="$(grep FC_CUSTOM /root/support/exBOMBER/tmp/scan_config | awk '{print $3}')"
     if [ "$SCAN_TYPE" = "FB" ]; then
 
         rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
@@ -936,13 +1250,33 @@ else
         DETACH M_SEARCH
         exit 0
 
-    else
+    elif [ "$SCAN_TYPE" = "PS" ]; then
 
         # NEED TO DEVELOP PHP_SITE_SCAN RE: http://www.gregfreeman.org/2013/how-to-tell-if-your-php-site-has-been-compromised/
         rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
         echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}PHP Site Scan${NOCOLOR}"
         DIVIDER
         echo -e "    ${YELLOW}IN DEVELOPMENT - CHECK BACK SOON${NOCOLOR}\n\n\n"
+
+    else
+
+        rm /root/support/exBOMBER/tmp/scan_config # Remove tmp file created during execution
+        echo -e "    ${WHITE}ex${CYAN}BOMBER ${WHITE}FINDCRACK0R Scan${NOCOLOR}"
+        DIVIDER
+        echo -e "    ${GREEN}Starting ${WHITE}FINDCRACK0R${GREEN} Scan..."
+        sleep 2
+        clear
+        HEADER
+        # Post scan information to terminal prior to detaching scan subshell
+        echo -e "    Notification will be sent to ${GREEN}$EMAIL_ADDR${NOCOLOR}\n"
+        echo -e "    Upon completion, scan pastefile will be moved to:\n"
+        echo -e "                ${WHITE}/var/log/exb_logs/findcrack0r/findcrack0r_pastefile_${GREEN}timestamp${NOCOLOR}\n"
+        echo -e "    (Provides fallback results presentation if notification email fails to send)\n"
+        echo -e "    FINDCRACK0R scan progress can be observed with:\n"
+        echo -e "                ${WHITE}tail -f /var/log/exb_logs/findcrack0r/standard_scan_$TIMESTAMP\n\n\n${NOCOLOR}" &
+        # Start scan in 'detached' subshell
+        DETACH FC_SEARCH
+        exit 0
 
     fi
 
