@@ -5,11 +5,11 @@
 
 #### Currently available scanners
 
-:ballot_box_with_check:  findbot.pl
+:white_check_mark:  findbot.pl
 
-:ballot_box_with_check:  findcrack0r.pl  <====:new:
+:white_check_mark:  findcrack0r.pl  <====:new:
 
-:ballot_box_with_check:  maldet
+:white_check_mark:  maldet
 
 
 #### In development
@@ -19,11 +19,11 @@
 
 #### Features
 
-:ballot_box_with_check:  Emails results
+:white_check_mark:  Emails results
 
-:ballot_box_with_check:  Provides pastebin of results
+:white_check_mark:  Provides pastebin of results
 
-:ballot_box_with_check:  Provides scan logfile for 'tail -f'
+:white_check_mark:  Provides scan logfile for 'tail -f'
 
 ---
 
