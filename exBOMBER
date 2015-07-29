@@ -1042,15 +1042,16 @@ FC_SEARCH () {
 
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS >> \
-        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" &&
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
 
     else
 
         # The actual Search command
         /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS $FC_CUSTOM_FLAGS >> \
-        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" &&
+        /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
 
     fi
+    sleep 5
     # Put something into a 'no results' log file
     if [ "$(wc -l /var/log/exb_logs/findcrack0r/standard_scan_$TIMESTAMP | awk '{print $1}')" = "2" ]; then
 
