@@ -327,8 +327,8 @@ FINDCRACK0R_HELPTEXT () {
     echo -e "            ${WHITE}/var/log/exb_logs/findcrack0r/${NOCOLOR}<log>\n"
     echo -e "        A pastebin of the log will also be provided.\n\n\n"
     echo -e -n "    [ ${CYAN}M${NOCOLOR} ] ${WHITE}Menu${NOCOLOR} | [ ${CYAN}Q${NOCOLOR} ] ${WHITE}Quit${NOCOLOR} : "
-    read -r MHT_CHOICE
-    case "$MHT_CHOICE" in
+    read -r FCHT_CHOICE
+    case "$FCHT_CHOICE" in
 
         [m,M]) GET_INSTRUCTIONS
                ;;
@@ -513,6 +513,8 @@ EXEC_FINDBOT () {
            echo -e "\n    FINDBOT.PL will search ${WHITE}$SEARCH_PATHS${NOCOLOR}\n"
            echo -e "    ${YELLOW}-NOTE-${NOCOLOR} This search will take quite some time to complete\n\n\n"
            # Allow option to use -c flag in findbot.pl scan
+           echo -e -n "    Enable Experimental ${WHITE}\"-c\"${NOCOLOR} (turbo) Option for FINDBOT.PL (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})? "
+           read -r F_TURBO_OPTION
            case $F_TURBO_OPTION in
 
                [y,Y]) echo TURBO_OPTION = ON >> /root/support/exBOMBER/tmp/scan_config
@@ -537,7 +539,7 @@ EXEC_FINDBOT () {
         3) tput cuu 2 && tput el
            echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
            echo -e -n "    [${WHITE}Enter Custom Path${NOCOLOR}]: "
-           read -r CUSTOM_PATH
+           read -e -r CUSTOM_PATH
            # Check to make sure user-entered custom path exists
            if [ -d "$CUSTOM_PATH" ]; then
 
@@ -642,7 +644,7 @@ EXEC_MALDET () {
         3) tput cuu 2 && tput el
            echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
            echo -e -n "    [${WHITE}Enter Custom Path${NOCOLOR}]: "
-           read -r CUSTOM_PATH
+           read -e -r CUSTOM_PATH
            # Check to make sure user-entered custom path exists
            if [ -d "$CUSTOM_PATH" ]; then
 
@@ -744,7 +746,7 @@ EXEC_FINDCRACK0R () {
         3) tput cuu 2 && tput el
            echo -e "\n    ${GREEN}-- ${WHITE}C${NOCOLOR}ustom ${WHITE}P${NOCOLOR}ath selected ${GREEN}--${NOCOLOR}   \n"
            echo -e -n "    [${WHITE}Enter Custom Path${NOCOLOR}]: "
-           read -r CUSTOM_PATH
+           read -e -r CUSTOM_PATH
            # Check to make sure user declared custom path exists
            if [ -d "$CUSTOM_PATH" ]; then
 
@@ -776,7 +778,7 @@ EXEC_FINDCRACK0R () {
 
            DIVIDER
            echo -e -n "    [${WHITE}Enter Custom Flags ${NOCOLOR}]: "
-           read -r FC_CUSTOM_FLAGS
+           read -e -r FC_CUSTOM_FLAGS
            tput cuu 1 && tput el
            echo -e "    The following Custom Flags will be used for the FINDCRACK0R scan:\n"
            echo -e "                ${WHITE}$FC_CUSTOM_FLAGS${NOCOLOR}\n"
@@ -799,7 +801,7 @@ EXEC_FINDCRACK0R () {
 
            esac
            echo -e -n "\n    [${WHITE}Enter Custom Path${NOCOLOR}]: "
-           read -r CUSTOM_PATH
+           read -e -r CUSTOM_PATH
            # Check to make sure user declared custom path exists
            if [ -d "$CUSTOM_PATH" ]; then
 
@@ -853,7 +855,7 @@ GET_NOTIFY_DESTINATION () {
     DIVIDER
     echo -e "    ${WHITE}${UNDERLINE_TEXT}Set Completed Scan Email Notification Address${NOCOLOR}\n\n"
     echo -e -n "    Enter notification email address: ${GREEN}"
-    read -r EMAIL_ADDR
+    read -e -r EMAIL_ADDR
     tput cuu 1 && tput el
     echo -e -n "    ${NOCOLOR}Send notifications to ${GREEN}$EMAIL_ADDR${NOCOLOR}, is that correct (${WHITE}y${NOCOLOR}/${WHITE}N${NOCOLOR})${WHITE}? ${NOCOLOR}"
     read -r EMAIL_ADDR_VERIFY
