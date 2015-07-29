@@ -1070,7 +1070,7 @@ FC_SEARCH () {
     else
 
         # The actual Search command
-        /root/support/exBOMBER/./findcrack0r.pl "$FC_CUSTOM_FLAGS" -o $SEARCH_PATHS >> \
+        /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS "$FC_CUSTOM_FLAGS" >> \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
         sed -i 's//root\/support\/scan-/var\/log\/exb_logs\/findcrack0r\/scan-/' \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP" && \
@@ -1078,7 +1078,7 @@ FC_SEARCH () {
 
     fi
     # Wait until the search completes to continue
-    while [ -f /root/support/exBOMBER/tmp/rc_running ]; do
+    while [ -f /root/support/exBOMBER/tmp/fc_running ]; do
 
         sleep 10
 
