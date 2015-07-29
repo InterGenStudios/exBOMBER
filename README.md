@@ -12,6 +12,12 @@
 
 ---
 
+### Watch exBOMBER in action:
+
+```
+http://teeny.ml/exbomber
+```
+
 #### To use:
 
 (root access required)
