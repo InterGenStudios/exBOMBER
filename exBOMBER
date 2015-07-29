@@ -1123,12 +1123,12 @@ FC_SEARCH () {
     mail -s "$SUBJECT" "$EMAIL_ADDR" < /root/support/exBOMBER/tmp/fc_scan_email 2>&1 >/dev/null
     # Remove temporary files created during execution
     rm /root/support/exBOMBER/tmp/fc_scan_email
-    if [ $(find /root/support/exBOMBER -type f -name 'scan-*.txt' | wc -l) -gt 0 ]; then
+    if [ $(find /root/support -type f -name 'scan-*.txt' | wc -l) -gt 0 ]; then
 
         mv /root/support/exBOMBER/scan-*txt /var/log/exb_logs/findcrack0r/
 
     fi
-    if [ $(find /root/support/exBOMBER -type f -name 'symlinks-*.txt' | wc -l) -gt 0 ]; then
+    if [ $(find /root/support -type f -name 'symlinks-*.txt' | wc -l) -gt 0 ]; then
 
         mv /root/support/exBOMBER/symlinks-*.txt /var/log/exb_logs/findcrack0r/
 
