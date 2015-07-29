@@ -1,20 +1,20 @@
 # exBOMBER
 ### A linux server hack/exploit-finder suite
 
-- Launches choice hack/exploit scanner in detached subshell
-    - findbot.pl        - Working
-    - findcrack0r.pl    - Working
-    - maldet            - Working
-    - PHPSiteScan       - In development
-- Emails results                      - Working
-- Provides pastebin of results        - Working
-- Provides scan logfile for 'tail -f' - Working
+#### Launches choice hack/exploit scanner in detached subshell
+    - [x] findbot.pl        - Working  :ballot_box_with_check:
+    - [x] findcrack0r.pl    - Working  :ballot_box_with_check:
+    - [x] maldet            - Working  :ballot_box_with_check: :new:
+    - [ ] PHPSiteScan       - In development
+- [x] Emails results                      - Working  :ballot_box_with_check:
+- [x] Provides pastebin of results        - Working  :ballot_box_with_check:
+- [x] Provides scan logfile for 'tail -f' - Working  :ballot_box_with_check:
 
 ---
 
 ### Watch exBOMBER in action:
 
- ===> http://teeny.ml/exbomber
+ :cinema: http://teeny.ml/exbomber
 
 
 #### To use:
