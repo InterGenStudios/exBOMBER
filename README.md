@@ -14,9 +14,8 @@
 
 ### Watch exBOMBER in action:
 
-```
-http://teeny.ml/exbomber
-```
+ ===> http://teeny.ml/exbomber
+
 
 #### To use:
 
