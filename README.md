@@ -7,7 +7,7 @@
 
 :white_check_mark:  findbot.pl
 
-:white_check_mark:  findcrack0r.pl  <====:new:
+:white_check_mark:  findcrack0r.pl  <---:new:
 
 :white_check_mark:  maldet
 
