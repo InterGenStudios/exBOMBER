@@ -1,7 +1,12 @@
 #!/usr/bin/env perl
+#
+# Coydogsoftware.net's Repository:
+#
+#          https://repo.coydogsoftware.net/coydog/rxtools/tree/master
+#
 # TODO: learn perl.
 # TODO TODO TODO: Verify that we are scanning every file. Got one
-# disturbing report of a false negative that should have been 
+# disturbing report of a false negative that should have been
 # detected
 #
 # Copyright 2014 Coydog Software. All rights reserved. Copying is prohibited
@@ -78,7 +83,7 @@ push @sigs, qr{GLOBALS.*GLOBALS.*GLOBALS.*GLOBALS.*GLOBALS.*GLOBALS.*GLOBALS.*GL
 push @sigs, qr{eval\s*\(stripslash};
 push @sigs, qr{eval\(gzuncompress\s*\(base64_decode};
 #consider if I really want to get in the business of tracking every false positive in the regex
-push @sigs, qr{eval\s*\(base64_decode\s*\((!IGlmKCEkY292ZXJ0c3RvcmVidWlsZGVyX29wdGlvbnMtPmlzX2xpY2V)}; 
+push @sigs, qr{eval\s*\(base64_decode\s*\((!IGlmKCEkY292ZXJ0c3RvcmVidWlsZGVyX29wdGlvbnMtPmlzX2xpY2V)};
 
 # avoid false positives from Smarty function.mailto, SpiffyCal
 # TODO: We could check for a script tag. But this will make us
@@ -99,7 +104,7 @@ push @sigs, qr{if \(!isset\(\$_REQUEST\['\w\w\w\w'\]\)\) header\("HTTP/1.0 404 N
 #push @sigs, qr{include\s*\(.*\.(?i)(png|jpg|jpeg|gif|svg|bmp|pdf)(?-i)};
 push @sigs, qr{include\s*\(\s*['"][\w/]*(?i)(png|jpg|jpeg|gif|svg|bmp|pdf)(?-i)['"]\s*\)};
 
-push @sigs, qr{base'\.\(32\*2\)\.'_de'\.'code}; 
+push @sigs, qr{base'\.\(32\*2\)\.'_de'\.'code};
 push @sigs, qr{base'\.\(2\*32\)\.'_de'\.'code};  # ugh
 push @sigs, qr{base'\.\(16\*4\)\.'_de'\.'code};  # LOL
 push @sigs, qr{base'\.\(4\*16\)\.'_de'\.'code};  # I can do this all day you know.
@@ -172,7 +177,7 @@ push @sigs, qr{Indonesian Blackhat}; #questionable to include this but these fol
 push @sigs, qr{Xnuxer Research}; # probably white- or grey- hats active 2002-2004. Their innocent PoC's and IRC mayhem tools were incorporated into malware.
 push @sigs, qr{SecretColony Lab N Research Project}; # binary backdoor shell authors
 
-#www.cyber-force.org 
+#www.cyber-force.org
 # http://turk-h.org/ - find as REFERER on defaced sites
 
 # maildrops
@@ -202,7 +207,7 @@ push @sigs, qr{##\[ POWERED BY};
 push @sigs, qr{\$OOO000000=urldecode};
 push @sigs, qr{\<\?\$f49\=|\$dewwpZ};   # lose it when generic version is tested
 push @sigs, qr{root\:toor};
-push @sigs, qr{I6ShOSm1};               # can probably lose it; was for eval POST IIRC 
+push @sigs, qr{I6ShOSm1};               # can probably lose it; was for eval POST IIRC
 push @sigs, qr{b374k};
 push @sigs, qr{DDoS\s+Perl\s+by\s+Dasilva}i;
 push @sigs, qr{\[dork\]}; # if this produces falsies, try the below
@@ -244,7 +249,7 @@ push @sigs, qr{\w\w=\".*\";.*\w\w\w=strtolower\(.*\).*=strtoupper.*if.*isset.*ev
 push @sigs, qr{\$\w+=.+;\$\w+=strto.+\(.+\)if.+isset.+eval}; # a more generic match for one-liner eval() backdoors with case-shifted lookup tables
 push @sigs, qr{if\(\@md5\(\$_SERVER\['HTTP_PATH'\]\)==='\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w\w'\)\{ \@extract\(\$_REQUEST\); \@die\(\$stime\(\$mtime\)\);};
 
-# match r_reporting(0); @ini_set(chr(101).chr(114).'ror_log',NULL); @ini_set('log_errors',0); if (count($_POST) 
+# match r_reporting(0); @ini_set(chr(101).chr(114).'ror_log',NULL); @ini_set('log_errors',0); if (count($_POST)
 push @sigs, qr{error_reporting\s*\(\s*0\s*\);\s*\@ini_set\s*\(.+\)\s*;.*_POST};
 #push @sigs, qr{\=.*isset.*eval.*exit.*fopen.*fwrite.*fclose.*exit};
 
@@ -291,23 +296,23 @@ push @sigs, qr{function smtpmail\(\$host, \$port, \$smtp_login, \$smtp_passw, \$
 # TODO: need a more generic form of the following for the heuristic sigs
 push @sigs, qr{.e.\..v.\..a.\..l\(b.\..a.\..s.\..e.\..6.\..4_d.\..e.\..c.\..o.\..d.\..e}; # if (!isset($indf8e7ff5a)) { $indf8e7ff5a = TRUE;assert("e"."v"."a"."l(b"."a"."s"."e"."6"."4_d"."e"."c"."o"."d"."e('ICRHTE9CQUxTWyd
 push @sigs, qr{if \(\!isset\(\$\w\w\w\w\w\w\w\w\w\w\w\)\) \{ \$indf8e7ff5a = TRUE;assert\("e"\."v"\."a"\."l\(b"\."a"\."s"\."e"\."6"\."4_d"\."e"\."c"\."o"\."d"\."e\(}; # "rar.php"
-push @sigs, qr{\@copy\(\$_FILES\[file\]\[tmp_name\], \$_FILES\[file\]\[name\]\); exit;}; 
-push @sigs, qr{SMTP CLOSED AND ATTEMPTS TO RECONNECT NEW CONNECTION SEASON}; 
-push @sigs, qr{PHP Shell by}; 
-push @sigs, qr{Nome do Servidor: <\?php echo \$UNAME = \@php_uname\(\);}; 
-push @sigs, qr{GR5yYXp3YH17ejRne3h9cGdgdWBxPDB5dX9xYWQ9NG8ZHjQ0NDQweHt4NCk0MzMvGR40NDQ0cntmPDB9KSQvMH00KDRnYGZ4cXo8MHl1f3FhZD0vMH0}; 
-push @sigs, qr{\$O00OO0=urldecode\(".*\);\$O00O0O=\$O00OO0\{.*\}\.\$O00OO0\{.*\}\.\$O00OO0\{.*\}.\$O00OO0\{.*\};\$O0OO00=\$O00OO0\{.*\}\.\$O00OO0\{.*\}\.\$O00OO0\{.*\}}; 
-push @sigs, qr{\$.*=.*realpath.*\.php.*if.*\!empty.*_POST.*and strlen.*_POST.*>.*and isset.*_POST.*eval.*file_put_contents.*unlink}; 
-push @sigs, qr{for\(\$i=0; \$i<strlen\(\$\S+\); \$i\+\+\)\{\$\S+\[\$i\]=chr\( ord\(\$\S+\[\$i\]\)\^\(\(\d+\)\%\d+\)\);\}}; 
+push @sigs, qr{\@copy\(\$_FILES\[file\]\[tmp_name\], \$_FILES\[file\]\[name\]\); exit;};
+push @sigs, qr{SMTP CLOSED AND ATTEMPTS TO RECONNECT NEW CONNECTION SEASON};
+push @sigs, qr{PHP Shell by};
+push @sigs, qr{Nome do Servidor: <\?php echo \$UNAME = \@php_uname\(\);};
+push @sigs, qr{GR5yYXp3YH17ejRne3h9cGdgdWBxPDB5dX9xYWQ9NG8ZHjQ0NDQweHt4NCk0MzMvGR40NDQ0cntmPDB9KSQvMH00KDRnYGZ4cXo8MHl1f3FhZD0vMH0};
+push @sigs, qr{\$O00OO0=urldecode\(".*\);\$O00O0O=\$O00OO0\{.*\}\.\$O00OO0\{.*\}\.\$O00OO0\{.*\}.\$O00OO0\{.*\};\$O0OO00=\$O00OO0\{.*\}\.\$O00OO0\{.*\}\.\$O00OO0\{.*\}};
+push @sigs, qr{\$.*=.*realpath.*\.php.*if.*\!empty.*_POST.*and strlen.*_POST.*>.*and isset.*_POST.*eval.*file_put_contents.*unlink};
+push @sigs, qr{for\(\$i=0; \$i<strlen\(\$\S+\); \$i\+\+\)\{\$\S+\[\$i\]=chr\( ord\(\$\S+\[\$i\]\)\^\(\(\d+\)\%\d+\)\);\}};
 push @sigs, qr{\$headers \.= "--\$strSid--";}; # spammer, ripped from a phpBB extension so might have false positives on phpBB boards.
 
-# these next 4 are from a single sample with almost virus-like replication.	Watch for false positives. 
-push @sigs, qr{\$names = array\("local","sys","old","htaccess","cache"\);}; 
-push @sigs, qr{\$fn = \$dirs\[0\]\."/"\.\$names\[0\]\."\.php";}; 
-push @sigs, qr{fwrite\(\$fp,base64_decode\(\$qq\)\);}; 
-push @sigs, qr{echo 'pre00'\.\(str_replace\("..","",\$fn\)\)\.'77do';}; 
-push @sigs, qr{This May Hack The Server}; 
-push @sigs, qr{\$option\("/438/e",\$\w\w,438\); die\(\);}; 
+# these next 4 are from a single sample with almost virus-like replication.	Watch for false positives.
+push @sigs, qr{\$names = array\("local","sys","old","htaccess","cache"\);};
+push @sigs, qr{\$fn = \$dirs\[0\]\."/"\.\$names\[0\]\."\.php";};
+push @sigs, qr{fwrite\(\$fp,base64_decode\(\$qq\)\);};
+push @sigs, qr{echo 'pre00'\.\(str_replace\("..","",\$fn\)\)\.'77do';};
+push @sigs, qr{This May Hack The Server};
+push @sigs, qr{\$option\("/438/e",\$\w\w,438\); die\(\);};
 push @sigs, qr{eval\("\?\>"\.gzuncompress\(base64_decode\(};
 push @sigs, qr{cyber173_decode};
 push @sigs, qr{file_put_contents\(.*php.*base64_decode\(.*echo\s+file_get_contents\(.*php.*\)};
@@ -418,7 +423,7 @@ sub wanted {
         (($scan_symlink
           && -l _ # symlink scan
           && match_link($_)))
-        || (-f _ 
+        || (-f _
           && ( /^.*php\z/si || !$scan_phponly )
           #&& !( /^.*$scan_exclude\z/si || $scan_exclude ne "" )
           #&& ((int(((-s _) + 511) / 512) <= 52428800) || $scan_bytes)
@@ -430,7 +435,7 @@ sub match_file {
     my $file = shift;
     #print "file: $file\n";
 
-    # loop over malware signatures. Probably less efficient than a combined 
+    # loop over malware signatures. Probably less efficient than a combined
     # alternation regex with | but easier to maintain signature list.
 
     progress_tick();
@@ -442,7 +447,7 @@ sub match_file {
     my ($n, $buf);
     $n = read $fh, $buf, $scan_bytes;
 
-    # open string as a file so we can process it by line, without array. 
+    # open string as a file so we can process it by line, without array.
     open my $bufh, '<', \$buf or die $!;
 
     # TODO: outer loop here for transforms (remove comments, etc).
@@ -456,10 +461,10 @@ sub match_file {
                 # a common false-positive could still be backdoored with something
                 # else whose signature we haven't matched yet
 
-                print "\b$File::Find::name matched $sig\n"; 
-                scanout "$File::Find::name\n"; 
-                debugout "$File::Find::name matched $sig\n"; 
-                return 1; 
+                print "\b$File::Find::name matched $sig\n";
+                scanout "$File::Find::name\n";
+                debugout "$File::Find::name matched $sig\n";
+                return 1;
             }
             #debugout "done matching line\n";
         }
@@ -472,14 +477,14 @@ sub match_file {
 }
 
 sub match_link {
-    # check if target owner different. 
+    # check if target owner different.
     # maybe only flag if owner is another cPanel user
     # TODO: will need a separate log for links
     my $link = shift;
 
     # TODO: kind of silly to stat again, try to avoid this? But we basically
     # need to do this to get link and link target owner uid
-    # TODO: if needed with can get clever with UID ranges to weed out false 
+    # TODO: if needed with can get clever with UID ranges to weed out false
     # positives.
     my ($t_foo, $t_baz, $t_quux, $t_xyzzy, $t_uid) = stat($link);
     my ($l_foo, $l_baz, $l_quux, $l_xyzzy, $l_uid) = lstat($link);
@@ -508,7 +513,7 @@ sub match_link {
     my $throbcount = 0;
     my @throbber = ('|', '/', '-', '\\');
     my @colors = qw(green green blue blue
-                cyan cyan yellow yellow 
+                cyan cyan yellow yellow
                 red red magenta magenta white white );
     my $numcolors = @colors;
     #my @throbber = ('_', '.', ',', '*', 'o', '0', 'O', '0', 'o', '*', ',', '.', '_' );
@@ -539,7 +544,7 @@ my $invoke_cwd = cwd();
 my $ticket          = $opt_t || $ENV{'TICKET'};
 $scan_phponly       = $opt_p || 0;
 $scan_bytes         = $opt_b || $default_bytes;
-$scan_debug         = $opt_D || 0; 
+$scan_debug         = $opt_D || 0;
 $scan_nonmatches    = $opt_N || 0;
 $scan_symlink       = !$opt_S || 0; # symlink scan is default now but can be disabled
 $scan_exclude       = $opt_e || "";
@@ -578,7 +583,7 @@ $scan_debugfile = $outdir . "/debug-" . $datestamp . ".txt";
 my @accts = split ',', $in_accts;
 my @otherdirs = split ",", $in_otherdirs;
 
-my @scandirs; 
+my @scandirs;
 for (@accts) {
     push @scandirs, $homeprefix . "/" .  $_ . "/public_html";
 }
@@ -586,7 +591,7 @@ for (@accts) {
 for (@otherdirs) {
     if (substr($_, 0, 1) ne "/") {
         push @scandirs, $invoke_cwd . "/" . $_;         # absolute path
-    } else { 
+    } else {
         push @scandirs, $_;
     }
 }
