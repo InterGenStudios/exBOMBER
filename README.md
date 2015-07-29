@@ -1,9 +1,9 @@
 # exBOMBER
-### A linux server hack/exploit-finder suite
 
-#### Launches choice hack/exploit scanner in detached subshell
+## Launches choice hack/exploit scanner in detached subshell
 
-Currently available scanners
+
+#### Currently available scanners
 
 :ballot_box_with_check: findbot.pl
 
@@ -11,11 +11,13 @@ Currently available scanners
 
 :ballot_box_with_check: maldet
 
-In development
+
+#### In development
 
 :soon: PHPSiteScan
 
-Features
+
+#### Features
 
 :ballot_box_with_check: Emails results
 
