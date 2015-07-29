@@ -788,7 +788,6 @@ EXEC_FINDCRACK0R () {
                       echo FC_CUSTOM_FLAGS = "$FC_CUSTOM_FLAGS" >> /root/support/exBOMBER/tmp/scan_config
                       echo -e "    ${WHITE}Custom Flags confirmed${NOCOLOR}"
                       sleep 2
-                      GET_NOTIFY_DESTINATION
                       ;;
                    *) tput cuu 1 && tput el
                       echo -e "    ${YELLOW}Custom Flags invalidated by user${NOCOLOR}"
@@ -799,6 +798,25 @@ EXEC_FINDCRACK0R () {
                       ;;
 
            esac
+           echo -e -n "\n    [${WHITE}Enter Custom Path${NOCOLOR}]: "
+           read -r CUSTOM_PATH
+           # Check to make sure user declared custom path exists
+           if [ -d "$CUSTOM_PATH" ]; then
+
+               tput cuu 2 && tput el
+               echo SEARCH_PATHS = "$CUSTOM_PATH" >> /root/support/exBOMBER/tmp/scan_config
+               echo -e "\n    FINDCRACK0R will now scan the ${WHITE}$CUSTOM_PATH${NOCOLOR} directory.\n\n\n\n"
+               sleep 2
+               GET_NOTIFY_DESTINATION
+
+           else
+
+               echo -e "\n    ${RED}${BLINK}INVALID PATH${NOCOLOR}\n\n\n\n"
+               sleep 2
+               # Loop invalid entries
+               EXEC_FINDCRACK0R
+
+           fi
            ;;
         *) echo -e "\n    ${RED}${BLINK}INVALID OPTION${NOCOLOR}\n\n\n\n"
            sleep 2
@@ -1048,7 +1066,7 @@ FC_SEARCH () {
     else
 
         # The actual Search command
-        /root/support/exBOMBER/./findcrack0r.pl -o $SEARCH_PATHS $FC_CUSTOM_FLAGS >> \
+        /root/support/exBOMBER/./findcrack0r.pl "$FC_CUSTOM_FLAGS" -o $SEARCH_PATHS >> \
         /var/log/exb_logs/findcrack0r/standard_scan_"$TIMESTAMP"
 
     fi
