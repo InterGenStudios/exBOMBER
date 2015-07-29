@@ -788,6 +788,7 @@ EXEC_FINDCRACK0R () {
                       echo FC_CUSTOM_FLAGS = "$FC_CUSTOM_FLAGS" >> /root/support/exBOMBER/tmp/scan_config
                       echo -e "    ${WHITE}Custom Flags confirmed${NOCOLOR}"
                       sleep 2
+                      GET_NOTIFY_DESTINATION
                       ;;
                    *) tput cuu 1 && tput el
                       echo -e "    ${YELLOW}Custom Flags invalidated by user${NOCOLOR}"
