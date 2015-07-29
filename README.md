@@ -2,12 +2,15 @@
 ### A linux server hack/exploit-finder suite
 
 - Launches choice hack/exploit scanner in detached subshell
-    - findbot.pl    - Working
-    - maldet        - Working
-    - PHPSiteScan - In development
+
+    - findbot.pl        - Working
+    - findcrack0r.pl    - Working
+    - maldet            - Working
+    - PHPSiteScan       - In development
+
 - Provides scan logfile for 'tail -f' - Working
-- Provides pastebin of results - Working
-- Emails results - Working
+- Provides pastebin of results        - Working
+- Emails results                      - Working
 
 ---
 
