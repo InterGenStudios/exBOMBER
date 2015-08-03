@@ -1179,6 +1179,7 @@ fi
 #########################
 
 # Move to the exBOMBER directory
+mkdir -p /root/support/exBOMBER
 cd /root/support/exBOMBER
 # ID any major panels running on system
 if [ -d /usr/local/cpanel ]; then
