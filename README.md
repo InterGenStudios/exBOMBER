@@ -29,7 +29,7 @@
 
 ### Watch exBOMBER in action:
 
- :cinema: http://teeny.ml/exbomber
+ :cinema: https://ittybitty.site/exbomber
 
 
 #### To use:
